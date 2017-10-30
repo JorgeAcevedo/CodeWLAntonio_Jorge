@@ -4,16 +4,16 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: WindowLifter.c $
+ * $Source: GPIO.c $
  * $Revision: 1 $
- * $Author: José Antonio $
- * $Date: 28/10/2017 $
+ * $Author: Jorge Acevedo $
+ * $Date: 26/10/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    main document for WindowLifter Project.
-    
+    GPIO mapping.
+
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -32,7 +32,7 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
-/*Jorge Acevedo        |         1.2        |Application Window Lifter DOWN   */
+/* Jorge Acevedo       |         1          |Development of the GPIO functions*/
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
@@ -42,8 +42,7 @@
 
 /* Includes */
 /*============================================================================*/
-#include "APP/WindowLifter.h"
-
+#include "MAL/GPIO.h"
 
 
 /* Constants and types  */
@@ -53,19 +52,11 @@
 
 /* Variables */
 /*============================================================================*/
-T_UWORD luw_Counter;
-T_UWORD luw_Process;
-T_UBYTE lub_LED;
-T_UBYTE lub_AntiPinchBloq;
-T_UBYTE lub_FOTU;
-T_UBYTE lub_FOTD;
-T_UBYTE lub_Value;
-T_UBYTE lub_CounterAntiPinch;
+
 
 
 /* Private functions prototypes */
 /*============================================================================*/
-int main (void);
 
 
 
@@ -77,101 +68,40 @@ int main (void);
 
 /* Private functions */
 /*============================================================================*/
-int main (void){
-	luw_Counter =0; lub_LED = 10; luw_Process = 0; lub_AntiPinchBloq = 0; lub_FOTU = 0; lub_FOTD = 0; lub_CounterAntiPinch = 0;
-	DisableWDOG();
-	InitClock (PCC_PORTB);
-	InitClock (PCC_PORTC);
-	InitClock (PCC_PORTD);
-	InitClock (PCC_PORTE);
-    InitSOSC();
-	InitSPLL();
-	InitNormalRunMode();
-	EnableLPIT(LPIT0,1);
-	InitPORTCInput  (FILTER, PTC13);
-	InitPORTCInput  (FILTER, PTC12);
-	InitPORTEInput  (PULLER, PTE0);
 
-	InitPORTBOutput  (PTB14);
-	InitPORTBOutput  (PTB15);
-	InitPORTBOutput  (PTB16);
-	InitPORTBOutput  (PTB17);
-	InitPORTCOutput  (PTC3);
-	InitPORTCOutput  (PTC7);
-	InitPORTCOutput  (PTC14);
-	InitPORTEOutput  (PTE9);
-	InitPORTEOutput  (PTE15);
-	InitPORTEOutput  (PTE16);
-	InitPORTDOutput  (PTD0);
-	InitPORTDOutput  (PTD16);
-
-	TurnOffLED(BlueLED);
-	TurnOffLED(GreenLED);
-
-    WindowClosed ();
-for(;;){
-while (0==(cps_LPIT->MSR & 0x00000001u)){}
-
-if(cps_GPIOC->PDIR & 1<<PTC12  && lub_LED == 0){luw_Process=0;}
-    	    	if(cps_GPIOC->PDIR & 1<<PTC12 && lub_LED >=1 && luw_Counter <10){luw_Counter++;}
-    	    	if(cps_GPIOC->PDIR & 1<<PTC12 && lub_LED >=1 && luw_Counter >=10 && luw_Counter<500){
-    	    		lub_FOTD=1; luw_Counter++; TurnOnLED(GreenLED);
-    	    	}
-    	    	if(cps_GPIOC->PDIR & 1<<PTC12 && lub_LED >=1 && luw_Counter ==500){
-    	    		lub_FOTD=0; TurnOnLED(GreenLED);
-    	    		if(luw_Process==0){
-    	    			   WindowControl(lub_LED);
-    	    			   lub_LED--;
-    	    			    luw_Process++;
-    	    			    			}
-    	    		if(luw_Process !=0 && luw_Process <400){
-    	    			    luw_Process++;
-    	    			    			}
-    	    		if(luw_Process == 400){
-    	    			    luw_Process = 0;
-    	    			    			}
-    	    		else{}}
-
-
-
-if((cps_GPIOC->PDIR & 1<<PTC13)==0){
-    		cps_GPIOD->PSOR |= 1<<0;
-    		if (0 == (cps_GPIOC->PDIR & 1<<12)){
-    			cps_GPIOD->PSOR |= 1<<16;
-    			luw_Counter = 0;
-    			}}
-
-if((cps_GPIOC->PDIR & 1<<PTC12)==0 && lub_FOTD == 1){
-    		if(0 == (cps_GPIOC->PDIR & 1<<13)){
-    		   if(lub_LED !=0){
-		    			if(luw_Process==0){
-		    		          WindowControl(lub_LED);
-		    		          lub_LED--;
-		    			      luw_Process++;}
-		    			if(luw_Process !=0 && luw_Process <400){
-		    			luw_Process++;
-		    			}
-		    			if(luw_Process ==400){
-		    				luw_Process=0;
-		    			}}
-			   if(lub_LED == 0){
-				  lub_FOTD=0;
-			}
-		}
-    	if(cps_GPIOC->PDIR & 1<<13){
-    		    			lub_FOTD = 0;
-    		    		}}
-    	cps_LPIT->MSR |= 0x00000001u;
-
-}
-return 0;
-}
 
 
 
 /* Exported functions */
 /*============================================================================*/
+void CfgPinOutput (S_GPIO* PTR, T_UBYTE PIN){
+	PTR->PDDR |= (1<<PIN);
+}
 
+void GPIO_void_CfgPinInput (S_GPIO* cps_PTR, T_UBYTE lul_PIN){
+	cps_PTR->PDDR &= ~(1<<lul_PIN);
+}
 
+void SetPin      (S_GPIO* PTR, T_UBYTE PIN){
+	PTR->PSOR |= (1<<PIN);
+}
+
+void ClearPin    (S_GPIO* PTR, T_UBYTE PIN){
+	PTR ->PCOR |= (1<<PIN);
+}
+
+void TogglePin (S_GPIO* PTR, T_UBYTE PIN){
+	PTR->PTOR |= (1<<PIN);
+}
+
+T_UBYTE GetPinValue (S_GPIO* PTR, T_UBYTE PIN){
+	PTR->PDIR & (1<<PIN);
+	/*if(PTR->PDIR & (1<<PIN)==1){
+		return 1;
+	}
+	if(PTR->PDIR & (1<<PIN)==0){
+			return 0;
+		}*/
+}
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */
