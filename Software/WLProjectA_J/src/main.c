@@ -32,9 +32,13 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR             |        VERSION     | DESCRIPTION     */
+/*  AUTHOR             |        VERSION     | DESCRIPTION                     */
+/*----------------------------------------------------------------------------*/
+/* JOSÉ ANTONIO V.T.   |     0              |   MANUAL FUNCTION FOR DOWN      */
 /*----------------------------------------------------------------------------*/
 /* JOSÉ ANTONIO V.T.   |     1              |   MANUAL FUNCTION FOR DOWN      */
+/*----------------------------------------------------------------------------*/
+/* JORGE ACEVEDO       |     2              |   MANUAL FUNCTION FOR DOWN      */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
@@ -143,7 +147,7 @@ void LPIT0_init_10msec (void){
 /*============================================================================*/
 
 int main (void){
-	T_ULONG lul_Counter=0u, lul_State=0u;
+	T_ULONG Counter=0u, State=0u;
 	DISABLE_WDOG ();
 	PORT_init ();
 	SOSC_init ();
@@ -157,121 +161,229 @@ int main (void){
 
 
 	for(;;){
-		while (0==(cps_LPIT->MSR & 0x00000001u)){}
-		if (cps_PTC->PDIR & (1<<12) && lul_Counter == 0u && lul_State == 0u){
-			lul_Counter++;
-		}
-		if (cps_PTC->PDIR & (1<<12) && lul_Counter < 50 && lul_State == 0){
-			lul_Counter++;
-		}
-		if (cps_PTC->PDIR & (1<<12) && lul_Counter >= 50 && lul_State >=0){
-			if (lul_State <40){
-				cps_PTE ->PCOR ^= (1<<9);
-				lul_State++;
+			while (0==(cps_LPIT->MSR & 0x00000001u)){}
+			if(cps_PTC->PDIR & 1<<12){
+				cps_PTD->PCOR |= 1<<16;
+			if (cps_PTC->PDIR & (1<<12) && Counter == 0u && State == 0u){
+				Counter++;
 			}
-			else {
-				cps_PTE ->PCOR ^= (1<<9);
+			if (cps_PTC->PDIR & (1<<12) && Counter < 50 && State >= 0){
+				Counter++;
 			}
-
-			//cps_PTD ->PCOR |= 1<<0;
-		}
-		if (cps_PTC->PDIR & (1<<12) && lul_Counter >= 50 && lul_State >=40){
-			if (lul_State <80){
-				cps_PTC->PCOR ^= 1<<7;
-							lul_State++;
-						}
-						else {
-							cps_PTC->PCOR ^= 1<<7;
-						}
-		}
-		if (cps_PTC->PDIR & (1<<12) && lul_Counter >= 50u && lul_State >=80){
-			if (lul_State <120){
-				cps_PTB->PCOR ^= 1<<17;
-									lul_State++;
-									}
-									else {
-										cps_PTB->PCOR ^= 1<<17;
-									}
+			if (cps_PTC->PDIR & (1<<12) && Counter >= 50 && State >=0){
+				if (State <40){
+					cps_PTE ->PCOR ^= (1<<9);
+					State++;
 				}
-		if (cps_PTC->PDIR & (1<<12) && lul_Counter >= 50u && lul_State >=120){
-					if (lul_State <160){
-						cps_PTB->PCOR ^= 1<<14;
-											lul_State++;
-											}
-											else {
-												cps_PTB->PCOR ^= 1<<14;
-											}
-						}
-		if (cps_PTC->PDIR & (1<<12) && lul_Counter >= 50u && lul_State >=160){
-					if (lul_State <200){
-						cps_PTB->PCOR ^= 1<<15;
-											lul_State++;
-											}
-											else {
-												cps_PTB->PCOR ^= 1<<15;
-											}
-						}
-		if (cps_PTC->PDIR & (1<<12) && lul_Counter >= 50u && lul_State >=200){
-					if (lul_State <240){
-						cps_PTB->PCOR ^= 1<<16;
-											lul_State++;
-											}
-											else {
-												cps_PTB->PCOR ^= 1<<16;
-											}
-						}
-		if (cps_PTC->PDIR & (1<<12) && lul_Counter >= 50u && lul_State >=240){
-					if (lul_State <280){
-						cps_PTC->PCOR ^= 1<<14;
-											lul_State++;
-											}
-											else {
-												cps_PTC->PCOR ^= 1<<14;
-											}
-						}
-		if (cps_PTC->PDIR & (1<<12) && lul_Counter >= 50u && lul_State >=280){
-					if (lul_State <320){
-						cps_PTC->PCOR ^= 1<<3;
-											lul_State++;
-											}
-											else {
-												cps_PTC->PCOR ^= 1<<3;
-											}
-						}
-		if (cps_PTC->PDIR & (1<<12) && lul_Counter >= 50u && lul_State >=320){
-					if (lul_State <360){
-						cps_PTE->PCOR ^= 1<<16;
-											lul_State++;
-											}
-											else {
-												cps_PTE->PCOR ^= 1<<16;
-											}
-						}
-		if (cps_PTC->PDIR & (1<<12) && lul_Counter >= 50u && lul_State >=360){
-					if (lul_State <400){
-						cps_PTE->PCOR ^= 1<<15;
-											lul_State++;
-											}
-											else {
-												cps_PTE->PCOR ^= 1<<15;
-											}
-						}
-		cps_LPIT->MSR |= 0x00000001u;
+				else {
+					cps_PTE ->PCOR ^= (1<<9);
+				}
+
+				//cps_PTD ->PCOR |= 1<<0;
+			}
+			if (cps_PTC->PDIR & (1<<12) && Counter >= 50 && State >=40){
+				if (State <80){
+					cps_PTC->PCOR ^= 1<<7;
+								State++;
+							}
+							else {
+								cps_PTC->PCOR ^= 1<<7;
+							}
+			}
+			if (cps_PTC->PDIR & (1<<12) && Counter >= 50 && State >=80){
+				if (State <120){
+					cps_PTB->PCOR ^= 1<<17;
+										State++;
+										}
+										else {
+											cps_PTB->PCOR ^= 1<<17;
+										}
+					}
+			if (cps_PTC->PDIR & (1<<12) && Counter >= 50  && State >=120){
+						if (State <160){
+							cps_PTB->PCOR ^= 1<<14;
+												State++;
+												}
+												else {
+													cps_PTB->PCOR ^= 1<<14;
+												}
+							}
+			if (cps_PTC->PDIR & (1<<12) && Counter >= 50 && State >=160){
+						if (State <200){
+							cps_PTB->PCOR ^= 1<<15;
+												State++;
+												}
+												else {
+													cps_PTB->PCOR ^= 1<<15;
+												}
+							}
+			if (cps_PTC->PDIR & (1<<12) && Counter >= 50 && State >=200){
+						if (State <240){
+							cps_PTB->PCOR ^= 1<<16;
+												State++;
+												}
+												else {
+													cps_PTB->PCOR ^= 1<<16;
+												}
+							}
+			if (cps_PTC->PDIR & (1<<12) && Counter >= 50 && State >=240){
+						if (State <280){
+							cps_PTC->PCOR ^= 1<<14;
+												State++;
+												}
+												else {
+													cps_PTC->PCOR ^= 1<<14;
+												}
+							}
+			if (cps_PTC->PDIR & (1<<12) && Counter >= 50 && State >=280){
+						if (State <320){
+							cps_PTC->PCOR ^= 1<<3;
+												State++;
+												}
+												else {
+													cps_PTC->PCOR ^= 1<<3;
+												}
+							}
+			if (cps_PTC->PDIR & (1<<12) && Counter >= 50 && State >=320){
+						if (State <360){
+							cps_PTE->PCOR ^= 1<<16;
+												State++;
+												}
+												else {
+													cps_PTE->PCOR ^= 1<<16;
+												}
+							}
+			if (cps_PTC->PDIR & (1<<12) && Counter >= 50  && State >=360){
+						if (State <400){
+							cps_PTE->PCOR ^= 1<<15;
+												State++;
+												}
+												else {
+													cps_PTE->PCOR ^= 1<<15;
+												}
+							}
+
+		} //fin del if de DOWN
+	/*if(0 == (cps_PTC->PDIR & 1<<12)){
+		cps_PTD->PSOR |= 1<<16;
+		if (0 == (cps_PTC->PDIR & 1<<13)){
+			Counter = 0;
+		}
+	}*/
+
+	if (cps_PTC->PDIR & 1<<13){
+		cps_PTD->PCOR |= 1<<0;
+
+		if (cps_PTC->PDIR & (1<<13) && Counter == 0u && State == 0u){
+					Counter++;
+				}
+				if (cps_PTC->PDIR & (1<<13) && Counter < 50 && State >= 0){
+					Counter++;
+				}
+
+		if (cps_PTC->PDIR & (1<<13) && Counter >= 50u && State <=400){
+							if (State >360){
+								cps_PTE->PSOR |= 1<<15;
+													State--;
+													}
+													else {
+														cps_PTE->PSOR |= 1<<15;
+													}
 	}
-}
-/** Check if action is allowed by overload protection.
- To avoid overheating of the door locking motors and hardware failure
- the software shall limit the number of activations in a short period.
- This function checks if the limitation algorithm allows or not
- a certain activation of the motors.
- \returns TRUE if the activation is allowed, FALSE if not
-*/
-//uint8 algreqg_olp_CheckOLPAllow(uint8 ReqestedAction_u8,       /**< the requested action to be performed (e.g. unlock) */
-                                //uint16 RequestedComponent_u16  /**< the mask of the doors which motors to be activated (e.g. front doors) */
-                                //)
-//{
-	//return 0;
-//}
+		if (cps_PTC->PDIR & (1<<13) && Counter >= 50u && State <=360){
+							if (State >320){
+								cps_PTE->PSOR |= 1<<16;
+													State--;
+													}
+													else {
+														cps_PTE->PSOR |= 1<<16;
+													}
+		}
+		if (cps_PTC->PDIR & (1<<13) && Counter >= 50u && State <=320){
+							if (State >280){
+								cps_PTC->PSOR |= 1<<3;
+													State--;
+													}
+													else {
+														cps_PTC->PSOR |= 1<<3;
+													}
+								}
+		if (cps_PTC->PDIR & (1<<13) && Counter >= 50u && State <=280){
+							if (State >240){
+								cps_PTC->PSOR |= 1<<14;
+													State--;
+													}
+													else {
+														cps_PTC->PSOR |= 1<<14;
+													}
+								}
+		if (cps_PTC->PDIR & (1<<13) && Counter >= 50u && State <=240){
+							if (State >200){
+								cps_PTB->PSOR |= 1<<16;
+													State--;
+													}
+													else {
+														cps_PTB->PSOR |= 1<<16;
+													}
+								}
+		if (cps_PTC->PDIR & (1<<13) && Counter >= 50u && State <=200){
+							if (State >160){
+								cps_PTB->PSOR |= 1<<15;
+													State--;
+													}
+													else {
+														cps_PTB->PSOR |= 1<<15;
+													}
+								}
+		if (cps_PTC->PDIR & (1<<13) && Counter >= 50u && State <=160){
+							if (State >120){
+								cps_PTB->PSOR |= 1<<14;
+													State--;
+													}
+													else {
+														cps_PTB->PSOR |= 1<<14;
+													}
+								}
+		if (cps_PTC->PDIR & (1<<13) && Counter >= 50u && State <=120){
+					if (State >80){
+						cps_PTB->PSOR |= 1<<17;
+											State--;
+											}
+											else {
+												cps_PTB->PSOR |= 1<<17;
+											}
+						}
+		if (cps_PTC->PDIR & (1<<13) && Counter >= 50 && State <=80){
+					if (State >40){
+						cps_PTC->PSOR |= 1<<7;
+									State--;
+								}
+								else {
+									cps_PTC->PSOR |= 1<<7;
+								}
+				}
+		if (cps_PTC->PDIR & (1<<13) && Counter >= 50 && State <=40){
+					if (State >0){
+						cps_PTE ->PSOR |= (1<<9);
+						State--;
+					}
+					else {
+						cps_PTE ->PSOR |= (1<<9);
+					}
+
+					//cps_PTD ->PCOR |= 1<<0;
+				}
+	} //Fin del if UP
+	if(0 == (cps_PTC->PDIR & 1<<13)){
+		cps_PTD->PSOR |= 1<<0;
+		if (0 == (cps_PTC->PDIR & 1<<12)){
+			cps_PTD->PSOR |= 1<<16;
+				Counter = 0;
+			}
+	}
+			cps_LPIT->MSR |= 0x00000001u;}
+	}
+
 
 
 /* Exported functions */
