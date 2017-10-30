@@ -32,6 +32,7 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
+/*José Antonio V.T     |         1.1        |Application Window Lifter UP     */
 /*Jorge Acevedo        |         1.2        |Application Window Lifter DOWN   */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
@@ -112,6 +113,26 @@ int main (void){
 for(;;){
 while (0==(cps_LPIT->MSR & 0x00000001u)){}
 
+   while (0==(cps_LPIT->MSR & 0x00000001u)){}
+    	if(cps_GPIOC->PDIR & 1<<PTC13  && lub_LED == 10){luw_Process=0;}
+    	if(cps_GPIOC->PDIR & 1<<PTC13 && lub_LED <=9 && luw_Counter <10){luw_Counter++;}
+    	if(cps_GPIOC->PDIR & 1<<PTC13 && lub_LED <=9 && luw_Counter >=10 && luw_Counter<500 && lub_CounterAntiPinch ==0){
+    		lub_FOTU=1; luw_Counter++; TurnOnLED(BlueLED);
+    	}
+    	if(cps_GPIOC->PDIR & 1<<PTC13 && lub_LED <=9 && luw_Counter ==500){
+    		lub_FOTU=0; TurnOnLED(BlueLED);
+    		if(lub_AntiPinchBloq == 0){
+    			if(luw_Process==0){
+    		lub_LED++;
+    		WindowControl(lub_LED);
+    			luw_Process++;}
+    			if(luw_Process !=0 && luw_Process <400){
+    			luw_Process++;
+    			}
+    			if(luw_Process ==400){
+    				luw_Process=0;
+    			}
+    		}
 if(cps_GPIOC->PDIR & 1<<PTC12  && lub_LED == 0){luw_Process=0;}
     	    	if(cps_GPIOC->PDIR & 1<<PTC12 && lub_LED >=1 && luw_Counter <10){luw_Counter++;}
     	    	if(cps_GPIOC->PDIR & 1<<PTC12 && lub_LED >=1 && luw_Counter >=10 && luw_Counter<500){
@@ -132,6 +153,79 @@ if(cps_GPIOC->PDIR & 1<<PTC12  && lub_LED == 0){luw_Process=0;}
     	    			    			}
     	    		else{}}
 
+    		if(lub_AntiPinchBloq == 1){
+    			if(lub_LED !=0){
+    				if(luw_Process==0){
+    				    			    WindowControl(lub_LED);
+    				    			    lub_LED--;
+    				    			    luw_Process++;}
+    				 if(luw_Process >10){
+    				    			    luw_Process++;
+    				    			    			}
+    				 if(luw_Process ==400){
+    				    			    luw_Process=0;
+    				    			    			}
+    			}
+    			else{
+    				if(luw_Process <5000){
+    					luw_Process++;
+    				}
+    				else{
+    					luw_Process=0;
+    					lub_AntiPinchBloq=0;
+    				}
+    			}
+    		}
+    	}}
+if((cps_GPIOC->PDIR & 1<<PTC13)==0 && lub_FOTU == 1){
+    		if(lub_AntiPinchBloq == 0 && 0 == (cps_GPIOC->PDIR & 1<<12)){
+    			if(lub_LED !=10){
+    		    			if(luw_Process==0){
+    		    		lub_LED++;
+    		    		WindowControl(lub_LED);
+    		    			luw_Process++;}
+    		    			if(luw_Process !=0 && luw_Process <400){
+    		    			luw_Process++;
+    		    			}
+    		    			if(luw_Process ==400){
+    		    				luw_Process=0;
+    		    			}}
+    			if(lub_LED == 10){
+    				lub_FOTU=0;
+    			}
+    		}
+    		if(lub_AntiPinchBloq == 0 && cps_GPIOC->PDIR & 1<<12){
+    			lub_FOTU = 0;
+    		}
+    		if(lub_AntiPinchBloq == 1){
+    		    			if(lub_LED !=0){
+    		    				if(luw_Process==0){
+    		    				    			    WindowControl(lub_LED);
+    		    				    			    lub_LED--;
+    		    				    			    luw_Process++;}
+    		    				 if(luw_Process >0){
+    		    				    			    luw_Process++;
+    		    				    			    			}
+    		    				 if(luw_Process ==400){
+    		    				    			    luw_Process=10;
+    		    				    			    			}
+    		    			}
+    		    			else{
+    		    				if(luw_Process <5000){
+    		    					luw_Process++;
+    		    				}
+    		    				else{
+    		    					luw_Process=0;
+    		    					lub_AntiPinchBloq=0;
+    		    				}
+    		    			}
+    		    		}
+    	}
+    	if(cps_GPIOE->PDIR & 1<<PTE0 && lub_CounterAntiPinch <10){lub_CounterAntiPinch++;}
+    	if(cps_GPIOE->PDIR & 1<<PTE0 && lub_CounterAntiPinch ==10  && (cps_GPIOC->PDIR & 1<<PTC13 || lub_FOTU == 1))
+    	{lub_AntiPinchBloq=1;}
+return 0;
+}
 
 
 if((cps_GPIOC->PDIR & 1<<PTC13)==0){
