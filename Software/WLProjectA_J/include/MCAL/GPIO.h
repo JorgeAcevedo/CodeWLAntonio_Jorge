@@ -77,7 +77,7 @@ typedef struct {
 
 /* Exported functions prototypes */
 /*============================================================================*/
-void CfgPinOutput   (S_GPIO* PTR, T_UBYTE PIN);
+void GPIO_void_GPIO_void_CfgPinOutput   (S_GPIO* PTR, T_UBYTE PIN);
 void GPIO_void_CfgPinInput (S_GPIO* cps_PTR, T_UBYTE lul_PIN);
 void SetPin      (S_GPIO* PTR, T_UBYTE PIN);
 void ClearPin    (S_GPIO* PTR, T_UBYTE PIN);
