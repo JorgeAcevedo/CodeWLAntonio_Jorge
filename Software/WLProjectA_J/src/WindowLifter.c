@@ -7,13 +7,13 @@
  * $Source: WindowLifter.c $
  * $Revision: 1 $
  * $Author: José Antonio $
- * $Date: 28/10/2017 $
+ * $Date: 29/10/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    main document for WindowLifter Project.
-    
+    main function for the window Lifter Application.
+
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -33,7 +33,12 @@
 /*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
 /*José Antonio V.T     |         1.1        |Application Window Lifter UP     */
+/*----------------------------------------------------------------------------*/
 /*Jorge Acevedo        |         1.2        |Application Window Lifter DOWN   */
+/*----------------------------------------------------------------------------*/
+/*Merge                |         2          |Application Window Lifter INTEGRATION   */
+/*----------------------------------------------------------------------------*/
+/*Jorge Acevedo        |         2.1        |Minor Problems solved            */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
@@ -61,7 +66,7 @@ T_UBYTE lub_AntiPinchBloq;
 T_UBYTE lub_FOTU;
 T_UBYTE lub_FOTD;
 T_UBYTE lub_Value;
-T_UBYTE lub_CounterAntiPinch;
+T_UWORD luw_CounterAntiPinch;
 
 
 /* Private functions prototypes */
@@ -78,8 +83,9 @@ int main (void);
 
 /* Private functions */
 /*============================================================================*/
+
 int main (void){
-	luw_Counter =0; lub_LED = 10; luw_Process = 0; lub_AntiPinchBloq = 0; lub_FOTU = 0; lub_FOTD = 0; lub_CounterAntiPinch = 0;
+	luw_Counter =0; lub_LED = 10; luw_Process = 0; lub_AntiPinchBloq = 0; lub_FOTU = 0; lub_FOTD = 0; luw_CounterAntiPinch = 0;
 	DisableWDOG();
 	InitClock (PCC_PORTB);
 	InitClock (PCC_PORTC);
@@ -110,13 +116,14 @@ int main (void){
 	TurnOffLED(GreenLED);
 
     WindowClosed ();
-for(;;){
-while (0==(cps_LPIT->MSR & 0x00000001u)){}
+
+
+    for(;;){
 
    while (0==(cps_LPIT->MSR & 0x00000001u)){}
     	if(cps_GPIOC->PDIR & 1<<PTC13  && lub_LED == 10){luw_Process=0;}
     	if(cps_GPIOC->PDIR & 1<<PTC13 && lub_LED <=9 && luw_Counter <10){luw_Counter++;}
-    	if(cps_GPIOC->PDIR & 1<<PTC13 && lub_LED <=9 && luw_Counter >=10 && luw_Counter<500 && lub_CounterAntiPinch ==0){
+    	if(cps_GPIOC->PDIR & 1<<PTC13 && lub_LED <=9 && luw_Counter >=10 && luw_Counter<500){
     		lub_FOTU=1; luw_Counter++; TurnOnLED(BlueLED);
     	}
     	if(cps_GPIOC->PDIR & 1<<PTC13 && lub_LED <=9 && luw_Counter ==500){
@@ -133,7 +140,33 @@ while (0==(cps_LPIT->MSR & 0x00000001u)){}
     				luw_Process=0;
     			}
     		}
-if(cps_GPIOC->PDIR & 1<<PTC12  && lub_LED == 0){luw_Process=0;}
+
+    		if(lub_AntiPinchBloq == 1){
+    			if(lub_LED !=0){
+    				if(luw_CounterAntiPinch==10){
+    				    			    WindowControl(lub_LED);
+    				    			    lub_LED--;
+    				    			    luw_CounterAntiPinch++;}
+    				 if(luw_CounterAntiPinch >10){
+    				    			    luw_CounterAntiPinch++;
+    				    			    			}
+    				 if(luw_CounterAntiPinch ==410){
+    				    			    luw_CounterAntiPinch=0;
+    				    			    			}
+    			}
+    			else{
+    				if(luw_CounterAntiPinch <5010){
+    					luw_CounterAntiPinch++;
+    				}
+    				else{
+    					luw_CounterAntiPinch=0;
+    					lub_AntiPinchBloq=0;
+    				}
+    			}
+    		}
+    	}
+
+    	if(cps_GPIOC->PDIR & 1<<PTC12  && lub_LED == 0){luw_Process=0;}
     	    	if(cps_GPIOC->PDIR & 1<<PTC12 && lub_LED >=1 && luw_Counter <10){luw_Counter++;}
     	    	if(cps_GPIOC->PDIR & 1<<PTC12 && lub_LED >=1 && luw_Counter >=10 && luw_Counter<500){
     	    		lub_FOTD=1; luw_Counter++; TurnOnLED(GreenLED);
@@ -153,31 +186,15 @@ if(cps_GPIOC->PDIR & 1<<PTC12  && lub_LED == 0){luw_Process=0;}
     	    			    			}
     	    		else{}}
 
-    		if(lub_AntiPinchBloq == 1){
-    			if(lub_LED !=0){
-    				if(luw_Process==0){
-    				    			    WindowControl(lub_LED);
-    				    			    lub_LED--;
-    				    			    luw_Process++;}
-    				 if(luw_Process >10){
-    				    			    luw_Process++;
-    				    			    			}
-    				 if(luw_Process ==400){
-    				    			    luw_Process=0;
-    				    			    			}
-    			}
-    			else{
-    				if(luw_Process <5000){
-    					luw_Process++;
-    				}
-    				else{
-    					luw_Process=0;
-    					lub_AntiPinchBloq=0;
-    				}
-    			}
-    		}
-    	}}
-if((cps_GPIOC->PDIR & 1<<PTC13)==0 && lub_FOTU == 1){
+
+    	if((cps_GPIOC->PDIR & 1<<PTC13)==0){
+    		cps_GPIOD->PSOR |= 1<<0;
+    		if (0 == (cps_GPIOC->PDIR & 1<<12)){
+    			cps_GPIOD->PSOR |= 1<<16;
+    			luw_Counter = 0;
+    			}}
+
+    	if((cps_GPIOC->PDIR & 1<<PTC13)==0 && lub_FOTU == 1){
     		if(lub_AntiPinchBloq == 0 && 0 == (cps_GPIOC->PDIR & 1<<12)){
     			if(lub_LED !=10){
     		    			if(luw_Process==0){
@@ -199,43 +216,39 @@ if((cps_GPIOC->PDIR & 1<<PTC13)==0 && lub_FOTU == 1){
     		}
     		if(lub_AntiPinchBloq == 1){
     		    			if(lub_LED !=0){
-    		    				if(luw_Process==0){
+    		    				if(luw_CounterAntiPinch==10){
     		    				    			    WindowControl(lub_LED);
     		    				    			    lub_LED--;
-    		    				    			    luw_Process++;}
-    		    				 if(luw_Process >0){
-    		    				    			    luw_Process++;
+    		    				    			    luw_CounterAntiPinch++;}
+    		    				 if(luw_CounterAntiPinch >10){
+    		    				    			    luw_CounterAntiPinch++;
     		    				    			    			}
-    		    				 if(luw_Process ==400){
-    		    				    			    luw_Process=10;
+    		    				 if(luw_CounterAntiPinch ==410){
+    		    				    			    luw_CounterAntiPinch=10;
     		    				    			    			}
     		    			}
     		    			else{
-    		    				if(luw_Process <5000){
-    		    					luw_Process++;
+    		    				if(luw_CounterAntiPinch <5010){
+    		    					luw_CounterAntiPinch++;
     		    				}
     		    				else{
-    		    					luw_Process=0;
+    		    					luw_CounterAntiPinch=0;
     		    					lub_AntiPinchBloq=0;
     		    				}
     		    			}
     		    		}
     	}
-    	if(cps_GPIOE->PDIR & 1<<PTE0 && lub_CounterAntiPinch <10){lub_CounterAntiPinch++;}
-    	if(cps_GPIOE->PDIR & 1<<PTE0 && lub_CounterAntiPinch ==10  && (cps_GPIOC->PDIR & 1<<PTC13 || lub_FOTU == 1))
+
+    	
+
+
+    	if(cps_GPIOE->PDIR & 1<<PTE0 && luw_CounterAntiPinch <10){luw_CounterAntiPinch++;}
+    	if(cps_GPIOE->PDIR & 1<<PTE0 && luw_CounterAntiPinch ==10  && (cps_GPIOC->PDIR & 1<<PTC13 || lub_FOTU == 1))
     	{lub_AntiPinchBloq=1;}
-return 0;
-}
 
 
-if((cps_GPIOC->PDIR & 1<<PTC13)==0){
-    		cps_GPIOD->PSOR |= 1<<0;
-    		if (0 == (cps_GPIOC->PDIR & 1<<12)){
-    			cps_GPIOD->PSOR |= 1<<16;
-    			luw_Counter = 0;
-    			}}
 
-if((cps_GPIOC->PDIR & 1<<PTC12)==0 && lub_FOTD == 1){
+    	if((cps_GPIOC->PDIR & 1<<PTC12)==0 && lub_FOTD == 1){
     		if(0 == (cps_GPIOC->PDIR & 1<<13)){
     		   if(lub_LED !=0){
 		    			if(luw_Process==0){
@@ -256,8 +269,8 @@ if((cps_GPIOC->PDIR & 1<<PTC12)==0 && lub_FOTD == 1){
     		    			lub_FOTD = 0;
     		    		}}
     	cps_LPIT->MSR |= 0x00000001u;
+    }
 
-}
 return 0;
 }
 
