@@ -4,18 +4,16 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: WriteReadPins.h $
+ * $Source: LPIT.x $
  * $Revision: 1 $
  * $Author: Jorge Acevedo $
- * $Date: 24/10/2017 $
+ * $Date: 26/10/17 $
  */
 /*============================================================================*/
-/* DESCRIPTION :                                                              */
-/** \file
-    function prototyping for:
-    Turning on the LED in bar
-    Turning off the green and blue LED
-    Reading the buttons
+/* DESCRIPTION :
+ *  Map of the Low Power Interrupt Timer                 */
+/**
+
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -34,76 +32,53 @@
 /*============================================================================*/
 /*  AUTHOR           |       VERSION      |          DESCRIPTION              */
 /*----------------------------------------------------------------------------*/
-/* Jorge Acevedo      |         1          |  FUNCTION PROTOTYPING WRITING    */
-/*                     |                    | ON LED AND READING BUTTON       */
-/*----------------------------------------------------------------------------*/
-/*                     |                    |                                 */
+/* Jorge Acevedo       |        1           |Configuration of the LPIT       */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
  * $Log: filename.h  $
   ============================================================================*/
-#ifndef WRITEREADPINS_H_
-#define WRITEREADPINS_H_
-
-
+#ifndef LPIT_H
+#define LPIT_H
 
 /* Includes */
 /*============================================================================*/
-#ifndef MAL_MAPING_TYPEDEF_H_
-#include "MCAL\Maping_TypeDef.h"
-#endif
-
-#define LED10 (T_ULONG)10
-#define LED9  (T_ULONG)9
-#define LED8  (T_ULONG)8
-#define LED7  (T_ULONG)7
-#define LED6  (T_ULONG)6
-#define LED5  (T_ULONG)5
-#define LED4  (T_ULONG)4
-#define LED3  (T_ULONG)3
-#define LED2  (T_ULONG)2
-#define LED1  (T_ULONG)1
-
-#define BLUE_LED  (T_ULONG)11
-#define GREEN_LED (T_ULONG)12
-
-#define ButtonUp    (T_ULONG)13
-#define ButtonDw    (T_ULONG)14
-#define ButtonPinch (T_ULONG)15
-
+#include "MAL\typDef.h"
 
 
 /* Constants and types */
 /*============================================================================*/
+typedef struct {
+    T_ULONG VERID;
+    T_ULONG PARAM;
+   T_ULONG MCR;
+   T_ULONG MSR;
+   T_ULONG MIER;
+   T_ULONG SETTEN;
+   T_ULONG CLRTEN;
+       T_UBYTE RESERVED_0[4];
+  struct {
+     T_ULONG TVAL;
+      T_ULONG CVAL;
+     T_ULONG TCTRL;
+         T_UBYTE RESERVED_0[4];
+  } TMR[4];
+} S_LPIT;
 
+#define LPIT_BASE_ADDRESS			 0x40037000u
+#define cps_LPIT 					 ((S_LPIT *)LPIT_BASE_ADDRESS)
 
 /* Exported Variables */
 /*============================================================================*/
 
 
 /* Exported functions prototypes */
-void TurnOnLed (T_ULONG);
-void TurnOffLed(T_ULONG);
-T_ULONG ReadButton(T_ULONG);
 /*============================================================================*/
+void EnableLPITClock(void);
+void SetLPITMilisec (T_UBYTE Channel, T_UBYTE Timer);
+void EnableLPITChannel (T_UBYTE Channel);
+void DisableLPITChannel (T_UBYTE Channel);
+
 
 #endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */
-
-
-/*
-
-
-* WriteRead_Pins.h
- *
- *  Created on: 24 oct. 2017
- *      Author: Jorge Acevedo
- */
-
-#ifndef HAL_WRITEREAD_PINS_H_
-#define HAL_WRITEREAD_PINS_H_
-
-
-
-#endif /* HAL_WRITEREAD_PINS_H_ */
