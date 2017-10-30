@@ -4,18 +4,16 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: WriteReadPins.h $
+ * $Source: ReadPin.h $
  * $Revision: 1 $
- * $Author: Jorge Acevedo $
- * $Date: 24/10/2017 $
+ * $Author: José Antonio $
+ * $Date: 26/10/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    function prototyping for:
-    Turning on the LED in bar
-    Turning off the green and blue LED
-    Reading the buttons
+    Read the PIN's value.
+
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -32,78 +30,40 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR           |       VERSION      |          DESCRIPTION              */
+/*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
 /*----------------------------------------------------------------------------*/
-/* Jorge Acevedo      |         1          |  FUNCTION PROTOTYPING WRITING    */
-/*                     |                    | ON LED AND READING BUTTON       */
-/*----------------------------------------------------------------------------*/
-/*                     |                    |                                 */
+/*José Antonio V.T     |         1          | FUNCTIONS TO GET THE PERIPHERIAL*/
+                       |                    | VALUE                           */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
  * $Log: filename.h  $
   ============================================================================*/
-#ifndef WRITEREADPINS_H_
-#define WRITEREADPINS_H_
-
-
+#ifndef READPIN_H
+#define READPIN_H
 
 /* Includes */
 /*============================================================================*/
-#ifndef MAL_MAPING_TYPEDEF_H_
-#include "MCAL\Maping_TypeDef.h"
-#endif
-
-#define LED10 (T_ULONG)10
-#define LED9  (T_ULONG)9
-#define LED8  (T_ULONG)8
-#define LED7  (T_ULONG)7
-#define LED6  (T_ULONG)6
-#define LED5  (T_ULONG)5
-#define LED4  (T_ULONG)4
-#define LED3  (T_ULONG)3
-#define LED2  (T_ULONG)2
-#define LED1  (T_ULONG)1
-
-#define BLUE_LED  (T_ULONG)11
-#define GREEN_LED (T_ULONG)12
-
-#define ButtonUp    (T_ULONG)13
-#define ButtonDw    (T_ULONG)14
-#define ButtonPinch (T_ULONG)15
-
-
+#include "MAL/GPIO.h"
 
 /* Constants and types */
 /*============================================================================*/
-
+#define UP    (T_UBYTE)1
+#define DOWN  (T_UBYTE)2
+#define PINCH (T_UBYTE)3
 
 /* Exported Variables */
 /*============================================================================*/
 
 
 /* Exported functions prototypes */
-void TurnOnLed (T_ULONG);
-void TurnOffLed(T_ULONG);
-T_ULONG ReadButton(T_ULONG);
 /*============================================================================*/
+T_UBYTE ButtonPush (T_UBYTE UDP);
+T_UBYTE ButtonNotPush (T_UBYTE UDP);
+
+T_UBYTE ButtonUPNotPush(void);
+T_UBYTE ButtonUPPush(void);
+
 
 #endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */
-
-
-/*
-
-
-* WriteRead_Pins.h
- *
- *  Created on: 24 oct. 2017
- *      Author: Jorge Acevedo
- */
-
-#ifndef HAL_WRITEREAD_PINS_H_
-#define HAL_WRITEREAD_PINS_H_
-
-
-
-#endif /* HAL_WRITEREAD_PINS_H_ */
