@@ -41,20 +41,16 @@
 /*
  * $Log: filename.h  $
   ============================================================================*/
-#ifndef WINDOWLIFTER_H
-#define WINDOWLIFTER_H
+#ifndef ONETOUCHUP_H
+#define ONETOUCHUP_H
 
 /* Includes */
 /*============================================================================*/
-#include "HAL/ReadPin.h"
-#include "HAL/ControlPin.h"
-#include "HAL/InitLPIT.h"
-#include "HAL/InitClock.h"
-#include "HAL/DisWDOG.h"
-#include "HAL/InitPORT.h"
+#include "APP/WindowControl.h"
 
 /* Constants and types */
 /*============================================================================*/
+
 
 /* Exported Variables */
 /*============================================================================*/
@@ -62,6 +58,6 @@
 
 /* Exported functions prototypes */
 /*============================================================================*/
-
+void OneTouchUP (T_UBYTE lub_LED);
 
 #endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */

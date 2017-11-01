@@ -4,18 +4,16 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: filename.h $
+ * $Source: LPIT.c $
  * $Revision: 1 $
- * $Author: José Antonio $
- * $Date: 26/10/2017 $
+ * $Author: Jorge Acevedo $
+ * $Date: 26/Oct/17 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
-/** \file
-    short description in one sentence end with dot.
-    detailed
-    multiline
-    description of the file
+/**
+ * Configuration of  Low Power Interrupt Timer for working at 10msec
+ * when Run mode is activated
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -32,36 +30,67 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
+/*  AUTHOR           |       VERSION      |          DESCRIPTION              */
 /*----------------------------------------------------------------------------*/
-/*José Antonio V.T     |         1          |                                 */
+/*Jorge Acevedo        |        1           |Configuration LPIT0 FOR 1msec
+ * 					   |					|		timer                     */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: filename.h  $
+ * $Log: LPIT.c  $
   ============================================================================*/
-#ifndef WINDOWLIFTER_H
-#define WINDOWLIFTER_H
 
 /* Includes */
 /*============================================================================*/
-#include "HAL/ReadPin.h"
-#include "HAL/ControlPin.h"
-#include "HAL/InitLPIT.h"
-#include "HAL/InitClock.h"
-#include "HAL/DisWDOG.h"
-#include "HAL/InitPORT.h"
+#include "MAL\LPIT.h"
+#include "MAL\PCC.h"
 
-/* Constants and types */
-/*============================================================================*/
-
-/* Exported Variables */
+/* Constants and types  */
 /*============================================================================*/
 
 
-/* Exported functions prototypes */
+
+/* Variables */
 /*============================================================================*/
 
 
-#endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */
+
+/* Private functions prototypes */
+/*============================================================================*/
+
+
+
+/* Inline functions */
+/*============================================================================*/
+
+
+
+
+/* Private functions */
+/*============================================================================*/
+
+
+
+
+/* Exported functions */
+/*============================================================================*/
+void EnableLPITClock(void)
+{
+	cps_LPIT->MCR |= (1<<0);
+}
+
+void SetLPITMilisec (T_UBYTE Channel, T_UBYTE Timer){
+	cps_LPIT->TMR[Channel].TVAL = 40000*Timer;
+}
+
+void EnableLPITChannel (T_UBYTE Channel){
+	cps_LPIT->TMR[Channel].TCTRL |= (1<<0);
+}
+
+void DisableLPITChannel (T_UBYTE Channel){
+	cps_LPIT ->TMR[Channel].TCTRL &= ~(1<<0);
+}
+
+
+ /* Notice: the file ends with a blank new line to avoid compiler warnings */

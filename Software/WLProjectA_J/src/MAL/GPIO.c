@@ -4,7 +4,7 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: filename.h $
+ * $Source: GPIO.c $
  * $Revision: 1 $
  * $Author: José Antonio $
  * $Date: 26/10/2017 $
@@ -12,10 +12,8 @@
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    short description in one sentence end with dot.
-    detailed
-    multiline
-    description of the file
+    GPIO mapping.
+
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -32,36 +30,78 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
+/*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
-/*José Antonio V.T     |         1          |                                 */
+/* JOSÉ ANTONIO V.T.   |         1          |Development of the GPIO functions*/
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: filename.h  $
+ * $Log: filename.c  $
   ============================================================================*/
-#ifndef WINDOWLIFTER_H
-#define WINDOWLIFTER_H
 
 /* Includes */
 /*============================================================================*/
-#include "HAL/ReadPin.h"
-#include "HAL/ControlPin.h"
-#include "HAL/InitLPIT.h"
-#include "HAL/InitClock.h"
-#include "HAL/DisWDOG.h"
-#include "HAL/InitPORT.h"
+#include "MAL/GPIO.h"
 
-/* Constants and types */
-/*============================================================================*/
 
-/* Exported Variables */
+/* Constants and types  */
 /*============================================================================*/
 
 
-/* Exported functions prototypes */
+
+/* Variables */
 /*============================================================================*/
 
 
-#endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */
+
+/* Private functions prototypes */
+/*============================================================================*/
+
+
+
+/* Inline functions */
+/*============================================================================*/
+
+
+
+
+/* Private functions */
+/*============================================================================*/
+
+
+
+
+/* Exported functions */
+/*============================================================================*/
+void CfgPinOutput (S_GPIO* PTR, T_UBYTE PIN){
+	PTR->PDDR |= (1<<PIN);
+}
+
+void CfgPinInput (S_GPIO* cps_PTR, T_UBYTE lul_PIN){
+	cps_PTR->PDDR &= ~(1<<lul_PIN);
+}
+
+void SetPin      (S_GPIO* PTR, T_UBYTE PIN){
+	PTR->PSOR |= (1<<PIN);
+}
+
+void ClearPin    (S_GPIO* PTR, T_UBYTE PIN){
+	PTR ->PCOR |= (1<<PIN);
+}
+
+void TogglePin (S_GPIO* PTR, T_UBYTE PIN){
+	PTR->PTOR |= (1<<PIN);
+}
+
+T_UBYTE GetPinValue (S_GPIO* PTR, T_UBYTE PIN){
+	PTR->PDIR & (1<<PIN);
+	/*if(PTR->PDIR & (1<<PIN)==1){
+		return 1;
+	}
+	if(PTR->PDIR & (1<<PIN)==0){
+			return 0;
+		}*/
+}
+
+ /* Notice: the file ends with a blank new line to avoid compiler warnings */

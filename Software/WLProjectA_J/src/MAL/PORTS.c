@@ -4,7 +4,7 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: filename.h $
+ * $Source: PORTS.c $
  * $Revision: 1 $
  * $Author: José Antonio $
  * $Date: 26/10/2017 $
@@ -12,10 +12,8 @@
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    short description in one sentence end with dot.
-    detailed
-    multiline
-    description of the file
+    PORTS configuration manager.
+
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -32,36 +30,60 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
+/*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
-/*José Antonio V.T     |         1          |                                 */
+/*JOSÉ ANTONIO V.T     |         1          |Functions to initialize ports    */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: filename.h  $
+ * $Log: filename.c  $
   ============================================================================*/
-#ifndef WINDOWLIFTER_H
-#define WINDOWLIFTER_H
 
 /* Includes */
 /*============================================================================*/
-#include "HAL/ReadPin.h"
-#include "HAL/ControlPin.h"
-#include "HAL/InitLPIT.h"
-#include "HAL/InitClock.h"
-#include "HAL/DisWDOG.h"
-#include "HAL/InitPORT.h"
+#include "MAL/PORTS.h"
 
-/* Constants and types */
-/*============================================================================*/
-
-/* Exported Variables */
+/* Constants and types  */
 /*============================================================================*/
 
 
-/* Exported functions prototypes */
+
+/* Variables */
 /*============================================================================*/
 
 
-#endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */
+
+/* Private functions prototypes */
+/*============================================================================*/
+
+
+
+/* Inline functions */
+/*============================================================================*/
+
+
+
+
+/* Private functions */
+/*============================================================================*/
+
+
+
+
+/* Exported functions */
+/*============================================================================*/
+void MuxGPIOPin (S_PORT* PTR, T_UBYTE PIN){
+	PTR->PCR[PIN]  |= 0x00000100u;
+}
+
+void FilterPin  (S_PORT* PTR, T_UBYTE PIN){
+	PTR->PCR[PIN] |= 0x00000010u;
+}
+
+void PullDownPin (S_PORT* PTR, T_UBYTE PIN){
+	PTR->PCR[PIN] |= 0x00000002u;
+}
+
+
+ /* Notice: the file ends with a blank new line to avoid compiler warnings */

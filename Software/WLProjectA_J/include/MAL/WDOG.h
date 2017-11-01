@@ -4,18 +4,16 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: filename.h $
+ * $Source: WDOG.h $
  * $Revision: 1 $
- * $Author: José Antonio $
+* $Author: José Antonio  $
  * $Date: 26/10/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    short description in one sentence end with dot.
-    detailed
-    multiline
-    description of the file
+    WDOG mapping.
+
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -34,27 +32,32 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
 /*----------------------------------------------------------------------------*/
-/*José Antonio V.T     |         1          |                                 */
+/*JOSÉ ANTONIO V.T.    |        1           |WDOG mapping and functions       */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
  * $Log: filename.h  $
   ============================================================================*/
-#ifndef WINDOWLIFTER_H
-#define WINDOWLIFTER_H
+#ifndef WDOG_H
+#define WDOG_H
 
 /* Includes */
 /*============================================================================*/
-#include "HAL/ReadPin.h"
-#include "HAL/ControlPin.h"
-#include "HAL/InitLPIT.h"
-#include "HAL/InitClock.h"
-#include "HAL/DisWDOG.h"
-#include "HAL/InitPORT.h"
+#include "TypDef.h"
 
 /* Constants and types */
 /*============================================================================*/
+typedef struct{
+	T_ULONG CS;
+	T_ULONG CNT;
+	T_ULONG TOVAL;
+	T_ULONG WIN;
+}S_WDOG;
+
+#define WDOG_BASE_ADDRESS    0x40052000
+
+#define cps_WDOG             ((S_WDOG *) WDOG_BASE_ADDRESS)
 
 /* Exported Variables */
 /*============================================================================*/

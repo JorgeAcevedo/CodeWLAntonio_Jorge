@@ -1,21 +1,22 @@
 /*============================================================================*/
 /*                        I BS SOFTWARE GROUP                                 */
 /*============================================================================*/
+/*============================================================================*/
+/*                        I BS SOFTWARE GROUP                                 */
+/*============================================================================*/
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: filename.h $
+ * $Source: PCC.c $
  * $Revision: 1 $
- * $Author: José Antonio $
- * $Date: 26/10/2017 $
+ * $Author: Jorge Acevedo $
+ * $Date: 26/Oct/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
-/** \file
-    short description in one sentence end with dot.
-    detailed
-    multiline
-    description of the file
+/** Functions for initialize the clock for the PORTB, PORTC, PORTD, PORTE &
+ * LPIT
+ *
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -32,36 +33,62 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
+/*  AUTHOR           |       VERSION      |          DESCRIPTION              */
 /*----------------------------------------------------------------------------*/
-/*José Antonio V.T     |         1          |                                 */
+/* Jorge Acevedo     |          1         |Iniilization clock for de PortB */
+/*                   |                    |PortC PortD PortE & LPIT        */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: filename.h  $
+ * $Log: PCC.c  $
   ============================================================================*/
-#ifndef WINDOWLIFTER_H
-#define WINDOWLIFTER_H
 
 /* Includes */
 /*============================================================================*/
-#include "HAL/ReadPin.h"
-#include "HAL/ControlPin.h"
-#include "HAL/InitLPIT.h"
-#include "HAL/InitClock.h"
-#include "HAL/DisWDOG.h"
-#include "HAL/InitPORT.h"
+#include "MAL\PCC.h"
 
-/* Constants and types */
-/*============================================================================*/
 
-/* Exported Variables */
+/* Constants and types  */
 /*============================================================================*/
 
 
-/* Exported functions prototypes */
+
+/* Variables */
 /*============================================================================*/
 
 
-#endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */
+
+/* Private functions prototypes */
+/*============================================================================*/
+
+
+
+/* Inline functions */
+/*============================================================================*/
+
+
+
+
+/* Private functions */
+/*============================================================================*/
+
+
+
+
+/** Check if action is allowed by overload protection.
+ To avoid overheating of the door locking motors and hardware failure
+ the software shall limit the number of activations in a short period.
+ This function checks if the limitation algorithm allows or not
+ a certain activation of the motors.
+ \returns TRUE if the activation is allowed, FALSE if not
+*/
+
+
+
+/* Exported functions */
+/*============================================================================*/
+
+
+
+ /* Notice: the file ends with a blank new line to avoid compiler warnings */

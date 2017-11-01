@@ -4,16 +4,18 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: WindowControl.h $
+ * $Source: filename.h $
  * $Revision: 1 $
  * $Author: José Antonio $
- * $Date: 27/10/2017 $
+ * $Date: 26/10/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    File to control the behaviour of the peripherials.
-    
+    short description in one sentence end with dot.
+    detailed
+    multiline
+    description of the file
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -32,7 +34,7 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
 /*----------------------------------------------------------------------------*/
-/*José Antonio V.T     |         1          |FUNCTIONS TO CONTROL WINDOW MOVES*/
+/*José Antonio V.T     |         1          |                                 */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
