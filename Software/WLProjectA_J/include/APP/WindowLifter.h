@@ -34,7 +34,7 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
 /*----------------------------------------------------------------------------*/
-                       |                    |LIFTER USE                       */
+/*                     |                    |LIFTER USE                       */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
@@ -66,6 +66,16 @@
 #define LED2  (T_UBYTE)2
 #define LED1  (T_UBYTE)1
 #define LED0  (T_UBYTE)0
+
+#define WINDOW_COMPLETELY_CLOSED     10
+#define WINDOW_COMPLETELY_OPEN        0
+#define VALIDATION_SIGNAL_TIME       10
+#define CHANGE_WINDOW_STATE_TIME    400
+#define START_TIME_COUNTER            0
+#define MANUAL_FUNCTION_TIME        500
+#define ACTIVATED                     1
+#define DESACTIVATED                  0
+
 /* Exported Variables */
 /*============================================================================*/
 

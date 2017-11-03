@@ -35,6 +35,9 @@
 /*Jorge Acevedo        |         4.2        |APP functions created & names    */
 /*                     |                    |in functions and constants change*/
 /*============================================================================*/
+/*José Antonio         |         4.3        |Main function modified with APP  */
+/*                     |                    |functions                        */
+/*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
@@ -51,6 +54,8 @@
 /* Constants and types  */
 /*============================================================================*/
 
+
+#define NOTPRESS         (T_UBYTE)0
 
 
 /* Variables */
@@ -88,89 +93,87 @@ int main (void);
 
 
 int main (void){
-
-	luw_TimeCounterValidation =0; lub_LEDBarState = 10; luw_TimeCounterLEDBarChange = 0; lub_AntiPinchBlock = 0; lub_FlagOneTouchUp = 0; lub_FlagOneTouchDown = 0; luw_TimeCounterAntiPinchChanges = 0;
-	DisableWDOG();
-	InitClock (PCC_PORTB);
-	InitClock (PCC_PORTC);
-	InitClock (PCC_PORTD);
-	InitClock (PCC_PORTE);
-    InitSOSC();
-	InitSPLL();
-	InitNormalRunMode();
-	EnableLPIT(LPIT0,1);
-	InitPORTCInput  (FILTER, PTC13);
-	InitPORTCInput  (FILTER, PTC12);
-	InitPORTEInput  (PULLER, PTE0);
-
-	InitPORTBOutput  (PTB14);
-	InitPORTBOutput  (PTB15);
-	InitPORTBOutput  (PTB16);
-	InitPORTBOutput  (PTB17);
-	InitPORTCOutput  (PTC3);
-	InitPORTCOutput  (PTC7);
-	InitPORTCOutput  (PTC14);
-	InitPORTEOutput  (PTE9);
-	InitPORTEOutput  (PTE15);
-	InitPORTEOutput  (PTE16);
-	InitPORTDOutput  (PTD0);
-	InitPORTDOutput  (PTD16);
-
-	TurnOffLED(BlueLED);
-	TurnOffLED(GreenLED);
+	luw_TimeCounterValidation =0; lub_LEDBarState = 10; luw_TimeCounterLEDBarChange = 0;
+	lub_AntiPinchBlock = 0; lub_FlagOneTouchUp = 0; lub_FlagOneTouchDown = 0;
+	luw_TimeCounterAntiPinchChanges = 0;
 
 
+
+	/*Start Conditions for the Window Lifter*/
+    ModuleInitialization();
+	ModuleStartConditions();
 
     for(;;){
 
    
-   while (ReadLPITTimmerFlag()){}
+        while (ReadLPITTimmerFlag()){}
 
-    	if(ButtonPress(UP)  && lub_LEDBarState == 10){luw_TimeCounterLEDBarChange=0;}
-    	if(ButtonPress(UP) && lub_LEDBarState <=9 && luw_TimeCounterValidation <10){luw_TimeCounterValidation++;}
-    	if(ButtonPress(UP) && lub_LEDBarState <=9 && luw_TimeCounterValidation >=10 && luw_TimeCounterValidation<500 &&  lub_AntiPinchBlock == 0){
-    		lub_FlagOneTouchUp=1; luw_TimeCounterValidation++; TurnOnLED(BlueLED);
+/*DOWN functions to close the windows, to verified the button press validation and manual control*/
+        if(ButtonPress(DOWN) && lub_LEDBarState == WINDOW_COMPLETELY_OPEN){luw_TimeCounterLEDBarChange= START_TIME_COUNTER;}
+
+            	if(ButtonPress(DOWN) && lub_LEDBarState > WINDOW_COMPLETELY_OPEN && luw_TimeCounterValidation < VALIDATION_SIGNAL_TIME)
+            	{luw_TimeCounterValidation++;}
+
+        if(ButtonPress(DOWN) && lub_LEDBarState > WINDOW_COMPLETELY_OPEN && luw_TimeCounterValidation >= VALIDATION_SIGNAL_TIME
+            			&& luw_TimeCounterValidation < MANUAL_FUNCTION_TIME){
+            	    		lub_FlagOneTouchDown= ACTIVATED; lub_FlagOneTouchUp= DESACTIVATED; luw_TimeCounterValidation++; TurnOnLED(GreenLED);
+            	    	}
+
+        if(ButtonPress(DOWN) && lub_LEDBarState > WINDOW_COMPLETELY_OPEN && luw_TimeCounterValidation == MANUAL_FUNCTION_TIME){
+            	    		TurnOnLED(GreenLED);
+            		        WindowDOWN(lpub_PtrLEDBarState, lpuw_PtrTimeCounterLEDBarChange);
+            		        lub_FlagOneTouchDown= DESACTIVATED;}
+
+        if (ButtonPress(UP)==NOTPRESS && ButtonPress(DOWN)== NOTPRESS && (*lpub_PtrFlagOneTouchDown) == ACTIVATED && (*lpub_PtrLEDBarState) > WINDOW_COMPLETELY_OPEN)
+            	    	      {WindowDOWN(lpub_PtrLEDBarState, lpuw_PtrTimeCounterLEDBarChange);}
+
+
+/*UP functions to close the windows, to verified the button press validation and manual control*/
+
+    	if(ButtonPress(UP)  && lub_LEDBarState == WINDOW_COMPLETELY_CLOSED){luw_TimeCounterLEDBarChange=START_TIME_COUNTER; lub_FlagOneTouchDown = DESACTIVATED;}
+
+    	if(ButtonPress(UP) && lub_LEDBarState < WINDOW_COMPLETELY_CLOSED && luw_TimeCounterValidation < VALIDATION_SIGNAL_TIME){luw_TimeCounterValidation++;}
+
+    	if(ButtonPress(UP) && lub_LEDBarState < WINDOW_COMPLETELY_CLOSED && luw_TimeCounterValidation >= VALIDATION_SIGNAL_TIME
+    			&& luw_TimeCounterValidation < MANUAL_FUNCTION_TIME &&  lub_AntiPinchBlock == DESACTIVATED){
+    		lub_FlagOneTouchUp=ACTIVATED; lub_FlagOneTouchDown = DESACTIVATED; luw_TimeCounterValidation++; TurnOnLED(BlueLED);
     	}
     	
-    	if(ButtonPress(UP) && lub_LEDBarState <=9 && luw_TimeCounterValidation == 500 &&  lub_AntiPinchBlock == 0){
+    	if(ButtonPress(UP) && lub_LEDBarState < WINDOW_COMPLETELY_CLOSED && luw_TimeCounterValidation == MANUAL_FUNCTION_TIME &&  lub_AntiPinchBlock == DESACTIVATED){
             TurnOnLED(BlueLED);
     		WindowUP(lpub_PtrLEDBarState, lpuw_PtrTimeCounterLEDBarChange);
-    		lub_FlagOneTouchUp=0;}
-    			
-    			
+    		lub_FlagOneTouchUp=DESACTIVATED;}
+
+    	if (ButtonPress(UP)==NOTPRESS && ButtonPress(DOWN) == NOTPRESS && (*lpub_PtrFlagOneTouchUp) == ACTIVATED
+    	    			&& (*lpub_PtrAntiPinchBlock) == DESACTIVATED && (*lpub_PtrLEDBarState) < WINDOW_COMPLETELY_CLOSED)
+    	    	      {WindowUP(lpub_PtrLEDBarState, lpuw_PtrTimeCounterLEDBarChange);}
 
 
-
-    			
-
-    		if(lub_LEDBarState !=0 && luw_TimeCounterValidation == 500 &&  lub_AntiPinchBlock == 1){
-                 AntiPinchfunction(lpub_PtrAntiPinchBlock, lpub_PtrLEDBarState, lpuw_PtrTimeCounterAntiPinchChanges);}
-
-    	
+/*AntiPinch function*/
+        if(lub_AntiPinchBlock == ACTIVATED){
+        	lub_FlagOneTouchUp = DESACTIVATED;
+        	AntiPinchfunction(lpub_PtrAntiPinchBlock, lpub_PtrLEDBarState, lpuw_PtrTimeCounterAntiPinchChanges);}
 
 
-    	if(ButtonPress(DOWN)  && lub_LEDBarState == 0){luw_TimeCounterLEDBarChange=0;}
-    	    	if(ButtonPress(DOWN) && lub_LEDBarState >=1 && luw_TimeCounterValidation <10){luw_TimeCounterValidation++;}
-    	    	if(ButtonPress(DOWN) && lub_LEDBarState >=1 && luw_TimeCounterValidation >=10 && luw_TimeCounterValidation<500){
-    	    		lub_FlagOneTouchDown=1; luw_TimeCounterValidation++; TurnOnLED(GreenLED);
-    	    	}
-    	    	if(ButtonPress(DOWN) && lub_LED >=1 && luw_Counter ==500){
-    	    		TurnOnLED(GreenLED);
-    		        WindowDOWN(lpub_PtrLEDBarState, lpuw_PtrTimeCounterLEDBarChange);
-    		        lub_FlagOneTouchUp=0;}
+/*AntiPinch button press validation*/
+    	if(ButtonPress(PINCH) && luw_TimeCounterAntiPinchChanges < VALIDATION_SIGNAL_TIME && (ButtonPress(UP)||lub_FlagOneTouchUp == ACTIVATED))
+    	{luw_TimeCounterAntiPinchChanges++;}
+    	if(ButtonPress(PINCH) && luw_TimeCounterAntiPinchChanges == VALIDATION_SIGNAL_TIME && (ButtonPress(UP)||lub_FlagOneTouchUp == ACTIVATED))
+    	{*lpub_PtrAntiPinchBlock = 1;}
     	    	
 
+/*Counter reset if there is no button pressed*/
+    	if(ButtonPress(UP)==NOTPRESS){
+    		     TurnOffLED(BlueLED);
+    	    if (ButtonPress(DOWN)==NOTPRESS){
+    		     TurnOffLED(GreenLED);
+    		     luw_TimeCounterValidation = START_TIME_COUNTER;
+    		}}
 
-    	if(ButtonNotPress(UP)){
-    		TurnOffLED(BlueLED);
-    		if (ButtonNotPress(DOWN)){
-    			TurnOffLED(GreenLED);
-    			luw_TimeCounterValidation = 0;
-    			}}
-/*
-    	if (ButtonNotPress(UP) && ButtonNotPress(DOWN) && (*lpub_PtrFlagOneTouchUp) == 1 && (*lpub_PtrAntiPinchBlock) == 0 && (*lpub_PtrLEDBarState) < 10)
-    	      {WindowUP(lpub_PtrLEDBarState, lpuw_PtrTimeCounterLEDBarChange);}
 
+        ResetLPITTimerFlag();}
+    return 0;
+}
     	
 
 

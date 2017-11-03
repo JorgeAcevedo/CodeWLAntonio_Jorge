@@ -4,16 +4,14 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: WDOG.h $
- * $Revision: 1 $
-* $Author: José Antonio  $
- * $Date: 26/10/2017 $
+ * $Source: AntiPinch.h $
+ * $Revision: version 1$
+ * $Author: Jorge Acevedo $
+ * $Date: 02/11/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
-/** \file
-    WDOG mapping.
-
+/** Contains the AntiPinch functionality of the window lifter module.
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -30,34 +28,27 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
+/*  AUTHOR           |       VERSION      |          DESCRIPTION              */
 /*----------------------------------------------------------------------------*/
-/*JOSÉ ANTONIO V.T.    |        1           |WDOG mapping and functions       */
+/* Jorge Acevedo     |         1          |AntiPinch function added         */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: filename.h  $
+ * $Log: AntiPinch.h  $
   ============================================================================*/
-#ifndef WDOG_H
-#define WDOG_H
+#ifndef ANTIPINCH_H
+#define ANTIPINCH_H
 
 /* Includes */
 /*============================================================================*/
-#include "TypDef.h"
+#include "APP/WindowLifter.h"
 
 /* Constants and types */
 /*============================================================================*/
-typedef struct{
-	T_ULONG CS;
-	T_ULONG CNT;
-	T_ULONG TOVAL;
-	T_ULONG WIN;
-}S_WDOG;
+#define NO_RESPONSE_TIME 5010
 
-#define WDOG_BASE_ADDRESS    0x40052000
 
-#define cps_WDOG             ((S_WDOG *) WDOG_BASE_ADDRESS)
 
 /* Exported Variables */
 /*============================================================================*/
@@ -65,6 +56,7 @@ typedef struct{
 
 /* Exported functions prototypes */
 /*============================================================================*/
+void AntiPinchfunction(T_UBYTE *lpub_PtrAntiPinchBlock, T_UBYTE *lpub_PtrLEDBarState,T_UWORD *lpuw_PtrTimeCounterAntiPinchChanges);
 
 
 #endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */

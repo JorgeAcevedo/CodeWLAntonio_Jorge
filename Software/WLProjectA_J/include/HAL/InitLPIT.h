@@ -63,5 +63,6 @@
 /*============================================================================*/
 void EnableLPIT (T_UBYTE Channel, T_UBYTE Timer);
 T_UBYTE ReadLPITTimmerFlag(void);
+void ResetLPITTimerFlag(void);
 
 #endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */

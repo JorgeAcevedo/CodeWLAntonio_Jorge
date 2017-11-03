@@ -83,6 +83,10 @@ void EnableLPIT (T_UBYTE Channel, T_UBYTE Timer){
 		SetLPITMilisec (Channel, Timer);
 		EnableLPITChannel (Channel);
 }
+/*T_UBYTE ReadLPITTimmerFlag(){
+
+	return (cps_LPIT->MSR & 0x00000001u);
+}*/
 
 T_UBYTE ReadLPITTimmerFlag(){
 	T_UBYTE lub_FlagState= (T_UBYTE)0;
@@ -93,6 +97,7 @@ T_UBYTE ReadLPITTimmerFlag(){
 	return lub_FlagState;
 }
 
-
+void ResetLPITTimerFlag(void){
+cps_LPIT->MSR |= 0x00000001u;}
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */

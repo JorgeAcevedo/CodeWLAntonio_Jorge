@@ -4,17 +4,14 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: SCG.c $
- * $Revision: 1 $
+ * $Source: AntiPinch.c $
+ * $Revision: version 1$
  * $Author: Jorge Acevedo $
- * $Date: 26/Oct/2017 $
+ * $Date: 02/11/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
-/** Functions for initializing the System Clock at 8 MHz
- *								   System Phase Lock Loop 160MHz
- *								   NormalRunMode  80MHz
-
+/** Contains the AntiPinch functionality of the window lifter module.
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -33,17 +30,17 @@
 /*============================================================================*/
 /*  AUTHOR           |       VERSION      |          DESCRIPTION              */
 /*----------------------------------------------------------------------------*/
-/* José Antonio V.T. | 1                  |Init SCC,SPLL,NormalRunMode      */
+/*Jorge Acevedo        |         1          |AntiPinch functionality developed*/
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: filename.c  $
+ * $Log: AntiPinch.c  $
   ============================================================================*/
 
 /* Includes */
 /*============================================================================*/
-#include "MAL\SCG.h"
+#include "APP\ModuleInitialization.h"
 
 
 /* Constants and types  */
@@ -72,8 +69,38 @@
 
 
 
+
 /* Exported functions */
 /*============================================================================*/
+void ModuleInitialization(void){
+
+	    DisableWDOG();
+		InitClock (PCC_PORTB);
+		InitClock (PCC_PORTC);
+		InitClock (PCC_PORTD);
+		InitClock (PCC_PORTE);
+	    InitSOSC();
+		InitSPLL();
+		InitNormalRunMode();
+		EnableLPIT(LPIT0,1);
+		InitPORTCInput  (FILTER, PTC13);
+		InitPORTCInput  (FILTER, PTC12);
+		InitPORTEInput  (PULLER, PTE0);
+
+		InitPORTBOutput  (PTB14);
+		InitPORTBOutput  (PTB15);
+		InitPORTBOutput  (PTB16);
+		InitPORTBOutput  (PTB17);
+		InitPORTCOutput  (PTC3);
+		InitPORTCOutput  (PTC7);
+		InitPORTCOutput  (PTC14);
+		InitPORTEOutput  (PTE9);
+		InitPORTEOutput  (PTE15);
+		InitPORTEOutput  (PTE16);
+		InitPORTDOutput  (PTD0);
+		InitPORTDOutput  (PTD16);
+}
+
 
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */

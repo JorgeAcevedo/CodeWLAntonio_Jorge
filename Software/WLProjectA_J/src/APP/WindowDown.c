@@ -79,7 +79,7 @@
 void WindowDOWN (T_UBYTE* lpub_PtrLEDBarState, T_UWORD* lpuw_PtrTimeCounterLEDBarChange){
 	if((*lpuw_PtrTimeCounterLEDBarChange)==0){
 	    		    		WindowControl((*lpub_PtrLEDBarState));
-	    		    		(*lpub_PtrLEDBarState)++;
+	    		    		(*lpub_PtrLEDBarState)--;
 	    		    		(*lpuw_PtrTimeCounterLEDBarChange)++;}
 	if((*lpuw_PtrTimeCounterLEDBarChange) !=0 && (*lpuw_PtrTimeCounterLEDBarChange) <400){
 	    		    		(*lpuw_PtrTimeCounterLEDBarChange)++;

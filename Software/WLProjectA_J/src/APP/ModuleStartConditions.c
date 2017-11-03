@@ -4,16 +4,14 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: WDOG.c $
- * $Revision: 1 $
- * $Author: José Antonio $
- * $Date: 26/10/2017 $
+ * $Source: AntiPinch.c $
+ * $Revision: version 1$
+ * $Author: Jorge Acevedo $
+ * $Date: 02/11/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
-/** \file
-    WDOG functions.
-
+/** Contains the AntiPinch functionality of the window lifter module.
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -30,19 +28,19 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR             |        VERSION     | DESCRIPTION                     */
+/*  AUTHOR           |       VERSION      |          DESCRIPTION              */
 /*----------------------------------------------------------------------------*/
-/* JOSÉ ANTONIO V.T.   |         1          |WDOG functions and mapping       */
+/*Jorge Acevedo        |         1          |AntiPinch functionality developed*/
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: filename.c  $
+ * $Log: AntiPinch.c  $
   ============================================================================*/
 
 /* Includes */
 /*============================================================================*/
-#include "MAL/WDOG.h"
+#include "APP\ModuleStartConditions.h"
 
 
 /* Constants and types  */
@@ -74,5 +72,12 @@
 
 /* Exported functions */
 /*============================================================================*/
+void ModuleStartConditions(void){
+	    TurnOffLED(BlueLED);
+		TurnOffLED(GreenLED);
+	    WindowClosed();
+}
+
+
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */

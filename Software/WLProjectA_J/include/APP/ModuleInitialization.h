@@ -4,16 +4,14 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: LPIT.x $
- * $Revision: 1 $
- * $Author: Jorge Acevedo $
- * $Date: 26/10/17 $
+ * $Source: ModuleInitialization.h $
+ * $Revision: version 1$
+ * $Author: José Antonio $
+ * $Date: 02/11/2017 $
  */
 /*============================================================================*/
-/* DESCRIPTION :
- *  Map of the Low Power Interrupt Timer                 */
-/**
-
+/* DESCRIPTION :                                                              */
+/** Contains the AntiPinch functionality of the window lifter module.
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -32,42 +30,25 @@
 /*============================================================================*/
 /*  AUTHOR           |       VERSION      |          DESCRIPTION              */
 /*----------------------------------------------------------------------------*/
-/* Jorge Acevedo       |        1           |Configuration of the LPIT       */
+/* José Antonio V.T. |         1          |Module start conditions          */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: filename.h  $
+ * $Log: AntiPinch.h  $
   ============================================================================*/
-#ifndef LPIT_H
-#define LPIT_H
+#ifndef MODULEINIT_H
+#define MODULEINIT_H
 
 /* Includes */
 /*============================================================================*/
-#include "MAL\typDef.h"
-
+#include "APP/WindowLifter.h"
 
 /* Constants and types */
 /*============================================================================*/
-typedef struct {
-    T_ULONG VERID;
-    T_ULONG PARAM;
-   T_ULONG MCR;
-   T_ULONG MSR;
-   T_ULONG MIER;
-   T_ULONG SETTEN;
-   T_ULONG CLRTEN;
-       T_UBYTE RESERVED_0[4];
-  struct {
-     T_ULONG TVAL;
-      T_ULONG CVAL;
-     T_ULONG TCTRL;
-         T_UBYTE RESERVED_0[4];
-  } TMR[4];
-} S_LPIT;
 
-#define LPIT_BASE_ADDRESS			 0x40037000u
-#define cps_LPIT 					 ((S_LPIT *)LPIT_BASE_ADDRESS)
+
+
 
 /* Exported Variables */
 /*============================================================================*/
@@ -75,10 +56,7 @@ typedef struct {
 
 /* Exported functions prototypes */
 /*============================================================================*/
-void EnableLPITClock(void);
-void SetLPITMilisec (T_UBYTE Channel, T_UBYTE Timer);
-void EnableLPITChannel (T_UBYTE Channel);
-void DisableLPITChannel (T_UBYTE Channel);
+void ModuleInitialization(void);
 
 
 #endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */

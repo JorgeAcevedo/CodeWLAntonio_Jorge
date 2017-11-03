@@ -90,10 +90,11 @@ T_UBYTE ButtonPress (T_UBYTE UPDOWNPINCH){
 
 T_UBYTE ButtonNotPress (T_UBYTE UPDOWNPINCH){
 	if(UPDOWNPINCH == UP){
-		return ~(GetPinValue(cps_GPIOC, PTC13));
+		return (~ButtonPress(UP));
 	}
 	if(UPDOWNPINCH == DOWN){
-		return ~(GetPinValue(cps_GPIOC, PTC12));}
+		return ~(GetPinValue(cps_GPIOC, PTC12));
+		}
 	if(UPDOWNPINCH == PINCH){
 		return ~GetPinValue(cps_GPIOE, PTE0);
 	}
