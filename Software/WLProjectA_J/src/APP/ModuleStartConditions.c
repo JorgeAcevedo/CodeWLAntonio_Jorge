@@ -4,16 +4,14 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: InitLPIT.c $
- * $Revision: 1 $
- * $Author: José Antonio $
- * $Date: 26/10/2017 $
+ * $Source: AntiPinch.c $
+ * $Revision: version 1$
+ * $Author: Jorge Acevedo $
+ * $Date: 02/11/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
-/** \file
-    Initialization of LPIT channels and time sets.
-
+/** Contains the AntiPinch functionality of the window lifter module.
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -30,21 +28,19 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR             |        VERSION     | DESCRIPTION                     */
+/*  AUTHOR           |       VERSION      |          DESCRIPTION              */
 /*----------------------------------------------------------------------------*/
-
-/*Jorge Acevedo        |         2          | LPIT read interrupt flag        */
-/*============================================================================*/
+/*Jorge Acevedo        |         1          |AntiPinch functionality developed*/
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: filename.c  $
+ * $Log: AntiPinch.c  $
   ============================================================================*/
 
 /* Includes */
 /*============================================================================*/
-#include "HAL/InitLPIT.h"
+#include "APP\ModuleStartConditions.h"
 
 
 /* Constants and types  */
@@ -76,28 +72,12 @@
 
 /* Exported functions */
 /*============================================================================*/
-void EnableLPIT (T_UBYTE Channel, T_UBYTE Timer){
-	    cps_PCC->PCC[PCC_LPIT] = 0x06000000u;
-	    InitClock (PCC_LPIT);
-		EnableLPITClock();
-		SetLPITMilisec (Channel, Timer);
-		EnableLPITChannel (Channel);
-}
-/*T_UBYTE ReadLPITTimmerFlag(){
-
-	return (cps_LPIT->MSR & 0x00000001u);
-}*/
-
-T_UBYTE ReadLPITTimmerFlag(){
-	T_UBYTE lub_FlagState= (T_UBYTE)0;
-
-	if(0==(cps_LPIT->MSR & 0x00000001u)){
-		lub_FlagState= (T_UBYTE)1;
-	}
-	return lub_FlagState;
+void ModuleStartConditions(void){
+	    TurnOffLED(BlueLED);
+		TurnOffLED(GreenLED);
+	    WindowClosed();
 }
 
-void ResetLPITTimerFlag(void){
-cps_LPIT->MSR |= 0x00000001u;}
+
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */

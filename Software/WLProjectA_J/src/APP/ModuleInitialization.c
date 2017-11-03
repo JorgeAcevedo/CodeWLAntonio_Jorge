@@ -4,16 +4,14 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: GPIO.c $
- * $Revision: 1 $
+ * $Source: AntiPinch.c $
+ * $Revision: version 1$
  * $Author: Jorge Acevedo $
- * $Date: 26/10/2017 $
+ * $Date: 02/11/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
-/** \file
-    GPIO mapping.
-
+/** Contains the AntiPinch functionality of the window lifter module.
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -30,19 +28,19 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR             |        VERSION     | DESCRIPTION                     */
+/*  AUTHOR           |       VERSION      |          DESCRIPTION              */
 /*----------------------------------------------------------------------------*/
-/* Jorge Acevedo       |         1          |Development of the GPIO functions*/
+/*Jorge Acevedo        |         1          |AntiPinch functionality developed*/
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: filename.c  $
+ * $Log: AntiPinch.c  $
   ============================================================================*/
 
 /* Includes */
 /*============================================================================*/
-#include "MAL/GPIO.h"
+#include "APP\ModuleInitialization.h"
 
 
 /* Constants and types  */
@@ -74,34 +72,35 @@
 
 /* Exported functions */
 /*============================================================================*/
-void CfgPinOutput (S_GPIO* PTR, T_UBYTE PIN){
-	PTR->PDDR |= (1<<PIN);
+void ModuleInitialization(void){
+
+	    DisableWDOG();
+		InitClock (PCC_PORTB);
+		InitClock (PCC_PORTC);
+		InitClock (PCC_PORTD);
+		InitClock (PCC_PORTE);
+	    InitSOSC();
+		InitSPLL();
+		InitNormalRunMode();
+		EnableLPIT(LPIT0,1);
+		InitPORTCInput  (FILTER, PTC13);
+		InitPORTCInput  (FILTER, PTC12);
+		InitPORTEInput  (PULLER, PTE0);
+
+		InitPORTBOutput  (PTB14);
+		InitPORTBOutput  (PTB15);
+		InitPORTBOutput  (PTB16);
+		InitPORTBOutput  (PTB17);
+		InitPORTCOutput  (PTC3);
+		InitPORTCOutput  (PTC7);
+		InitPORTCOutput  (PTC14);
+		InitPORTEOutput  (PTE9);
+		InitPORTEOutput  (PTE15);
+		InitPORTEOutput  (PTE16);
+		InitPORTDOutput  (PTD0);
+		InitPORTDOutput  (PTD16);
 }
 
-void GPIO_void_CfgPinInput (S_GPIO* cps_PTR, T_UBYTE lul_PIN){
-	cps_PTR->PDDR &= ~(1<<lul_PIN);
-}
 
-void SetPin      (S_GPIO* PTR, T_UBYTE PIN){
-	PTR->PSOR |= (1<<PIN);
-}
-
-void ClearPin    (S_GPIO* PTR, T_UBYTE PIN){
-	PTR ->PCOR |= (1<<PIN);
-}
-
-void TogglePin (S_GPIO* PTR, T_UBYTE PIN){
-	PTR->PTOR |= (1<<PIN);
-}
-
-T_UBYTE GetPinValue (S_GPIO* PTR, T_UBYTE PIN){
-	PTR->PDIR & (1<<PIN);
-	/*if(PTR->PDIR & (1<<PIN)==1){
-		return 1;
-	}
-	if(PTR->PDIR & (1<<PIN)==0){
-			return 0;
-		}*/
-}
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */

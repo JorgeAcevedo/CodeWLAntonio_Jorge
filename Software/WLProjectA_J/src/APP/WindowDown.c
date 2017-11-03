@@ -4,16 +4,18 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: GPIO.h $
+ * $Source: filename.c $
  * $Revision: 1 $
- * $Author: Jorge Acevedo $
+ * $Author: José Antonio $
  * $Date: 26/10/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    GPIO mapping
-
+    short description in one sentence end with dot.
+    detailed
+    multiline
+    description of the file
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -32,57 +34,64 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
-/* JORGE ACEVEDO       |          1         | GPIO mapping and definitions    */
+/*José Antonio V.T     |         1          |Function to OneTouch functionality*/
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: filename.h  $
+ * $Log: filename.c  $
   ============================================================================*/
-#ifndef GPIO_H
-#define GPIO_H
 
 /* Includes */
 /*============================================================================*/
-#include "TypDef.h"
-
-/* Constants and types */
-/*============================================================================*/
-typedef struct {
-	T_ULONG PDOR;
-	T_ULONG PSOR;
-	T_ULONG PCOR;
-	T_ULONG PTOR;
-	T_ULONG PDIR;
-	T_ULONG PDDR;
-	T_ULONG PIDR;
-}S_GPIO;
-
-#define GPIO_PORTA_BASE_ADDRESS      0x400FF000
-#define GPIO_PORTB_BASE_ADDRESS      0x400FF040
-#define GPIO_PORTC_BASE_ADDRESS      0x400FF080
-#define GPIO_PORTD_BASE_ADDRESS      0x400FF0C0
-#define GPIO_PORTE_BASE_ADDRESS      0x400FF100
+#include <APP/WindowUp.h>
 
 
-#define cps_GPIOA           ((S_GPIO *)GPIO_PORTA_BASE_ADDRESS)
-#define cps_GPIOB           ((S_GPIO *)GPIO_PORTB_BASE_ADDRESS)
-#define cps_GPIOC           ((S_GPIO *)GPIO_PORTC_BASE_ADDRESS)
-#define cps_GPIOD           ((S_GPIO *)GPIO_PORTD_BASE_ADDRESS)
-#define cps_GPIOE           ((S_GPIO *)GPIO_PORTE_BASE_ADDRESS)
-
-/* Exported Variables */
+/* Constants and types  */
 /*============================================================================*/
 
 
-/* Exported functions prototypes */
+
+/* Variables */
 /*============================================================================*/
-void CfgPinOutput   (S_GPIO* PTR, T_UBYTE PIN);
-void GPIO_void_CfgPinInput (S_GPIO* cps_PTR, T_UBYTE lul_PIN);
-void SetPin      (S_GPIO* PTR, T_UBYTE PIN);
-void ClearPin    (S_GPIO* PTR, T_UBYTE PIN);
-T_UBYTE GetPinValue (S_GPIO* PTR, T_UBYTE PIN);
 
 
 
-#endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */
+/* Private functions prototypes */
+/*============================================================================*/
+
+
+
+/* Inline functions */
+/*============================================================================*/
+
+
+
+
+/* Private functions */
+/*============================================================================*/
+
+
+
+
+/* Exported functions */
+/*============================================================================*/
+void WindowDOWN (T_UBYTE* lpub_PtrLEDBarState, T_UWORD* lpuw_PtrTimeCounterLEDBarChange){
+	if((*lpuw_PtrTimeCounterLEDBarChange)==0){
+	    		    		WindowControl((*lpub_PtrLEDBarState));
+	    		    		(*lpub_PtrLEDBarState)--;
+	    		    		(*lpuw_PtrTimeCounterLEDBarChange)++;}
+	if((*lpuw_PtrTimeCounterLEDBarChange) !=0 && (*lpuw_PtrTimeCounterLEDBarChange) <400){
+	    		    		(*lpuw_PtrTimeCounterLEDBarChange)++;
+	    		    			}
+	if((*lpuw_PtrTimeCounterLEDBarChange) ==400){
+	    		    		(*lpuw_PtrTimeCounterLEDBarChange)=0;
+	    		    			}}
+
+
+
+
+
+
+
+ /* Notice: the file ends with a blank new line to avoid compiler warnings */

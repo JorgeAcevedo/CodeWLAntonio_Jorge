@@ -7,7 +7,7 @@
  * $Source: WindowControl.h $
  * $Revision: 1 $
  * $Author: José Antonio $
- * $Date: 27/10/2017 $
+ * $Date: 26/10/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
@@ -32,7 +32,6 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
 /*----------------------------------------------------------------------------*/
-/*José Antonio V.T     |         1          |FUNCTIONS TO CONTROL WINDOW MOVES*/
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
@@ -60,6 +59,10 @@
 #define LED1  (T_UBYTE)1
 #define LED0  (T_UBYTE)0
 
+#define COMPLETE_OPEN_WINDOW 0
+#define ANTIPINCH_BUTTON_VALIDATION_TIME 10
+#define ANTIPINCH_NEXT_ 10
+
 
 
 /* Exported Variables */
@@ -71,5 +74,4 @@
 
 void WindowControl (T_UBYTE LED);
 void WindowClosed (void);
-
 #endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */

@@ -6,7 +6,11 @@
 /*!
  * $Source: filename.c $
  * $Revision: 1 $
+<<<<<<< HEAD
  * $Author: Josï¿½ Antonio $
+=======
+ * $Author: José Antonio $
+>>>>>>> 81df2ed406b9afb9b7599f00ef8ad8d46df6eff4
  * $Date: 26/10/2017 $
  */
 /*============================================================================*/
@@ -34,7 +38,11 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
+<<<<<<< HEAD
 /*Josï¿½ Antonio V.T     |         1          |Function to OneTouch functionality*/
+=======
+/*José Antonio V.T     |         1          |Function to OneTouch functionality*/
+>>>>>>> 81df2ed406b9afb9b7599f00ef8ad8d46df6eff4
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
@@ -74,7 +82,10 @@
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 81df2ed406b9afb9b7599f00ef8ad8d46df6eff4
 /* Exported functions */
 /*============================================================================*/
 void WindowUP (T_UBYTE* lpub_PtrLEDBarState, T_UWORD* lpuw_PtrTimeCounterLEDBarChange){

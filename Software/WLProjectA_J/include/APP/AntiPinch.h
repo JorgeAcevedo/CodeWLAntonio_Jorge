@@ -42,6 +42,7 @@
 
 /* Includes */
 /*============================================================================*/
+<<<<<<< HEAD
 #include "MAL\TypDef.h"
 
 /* Constants and types */
@@ -53,6 +54,14 @@
 #define CHANGE_WINDOW_STATE_TIME 410
 #define NO_RESPONSE_TIME 5010
 #define REESTART_TIME_COUNTER 0
+=======
+#include "APP/WindowLifter.h"
+
+/* Constants and types */
+/*============================================================================*/
+#define NO_RESPONSE_TIME 5010
+
+>>>>>>> 81df2ed406b9afb9b7599f00ef8ad8d46df6eff4
 
 
 /* Exported Variables */

@@ -4,15 +4,15 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: LPIT_MAP.h $
- * $Revision: 1 $
+ * $Source: SCG.c $
+ * $Revision: version $
  * $Author: Jorge Acevedo $
- * $Date: 26/10/2017 $
+ * $Date: 26/10/17 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    mapping for the low power interrupt timer.
+    Mapping of the system clock generator.
 
 */
 /*============================================================================*/
@@ -32,41 +32,52 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
-/* JORGE ACEVEDO       | 1                  |  MAPPING OF THE LPIT            */
+/* JORGE ACEVEDO J.   |  1                 | MAPPING OF THE SCG               */
+/*                     |                    |                                 */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: filename.h  $
+ * $Log:      SCG.h  $
   ============================================================================*/
-#ifndef LPIT_MAP_H
-#define LPIT_MAP_H
+#ifndef SCG_H_
+#define SCG_H_
 
 /* Includes */
 /*============================================================================*/
-#include "S32K144p.h"
+#include "MAL\TypDef.h"
 
 /* Constants and types */
 /*============================================================================*/
 typedef struct {
-    T_ULONG VERID;                             /**< Versin ID Register, ffset: 0x0 */
-    T_ULONG PARAM;                             /**< Parameter Register, ffset: 0x4 */
-   T_ULONG MCR;                               /**< Mdule Cntrl Register, ffset: 0x8 */
-   T_ULONG MSR;                               /**< Mdule Status Register, ffset: 0xC */
-   T_ULONG MIER;                              /**< Mdule Interrupt Enable Register, ffset: 0x10 */
-   T_ULONG SETTEN;                            /**< Set Timer Enable Register, ffset: 0x14 */
-   T_ULONG CLRTEN;                            /**< Clear Timer Enable Register, ffset: 0x18 */
-       T_UBYTE RESERVED_0[4];
-  struct {                                         /* ffset: 0x20, array step: 0x10 */
-     T_ULONG TVAL;                              /**< Timer Value Register, array ffset: 0x20, array step: 0x10 */
-      T_ULONG CVAL;                              /**< Current Timer Value, array ffset: 0x24, array step: 0x10 */
-     T_ULONG TCTRL;                             /**< Timer Cntrl Register, array ffset: 0x28, array step: 0x10 */
-         T_UBYTE RESERVED_0[4];
-  } TMR[4];
-} S_LPIT;
+    T_ULONG VERID;                             /**< Version ID Register, offset: 0x0 */
+    T_ULONG PARAM;                             /**< Parameter Register, offset: 0x4 */
+       T_UBYTE RESERVED_0[8];
+    T_ULONG CSR;                               /**< Clock Status Register, offset: 0x10 */
+    T_ULONG RCCR;                              /**< Run Clock Control Register, offset: 0x14 */
+    T_ULONG VCCR;                              /**< VLPR Clock Control Register, offset: 0x18 */
+    T_ULONG HCCR;                              /**< HSRUN Clock Control Register, offset: 0x1C */
+    T_ULONG CLKOUTCNFG;                        /**< SCG CLKOUT Configuration Register, offset: 0x20 */
+       T_UBYTE RESERVED_1[220];
+    T_ULONG SOSCCSR;                           /**< System OSC Control Status Register, offset: 0x100 */
+    T_ULONG SOSCDIV;                           /**< System OSC Divide Register, offset: 0x104 */
+    T_ULONG SOSCCFG;                           /**< System Oscillator Configuration Register, offset: 0x108 */
+    T_UBYTE RESERVED_2[244];
+    T_ULONG SIRCCSR;                           /**< Slow IRC Control Status Register, offset: 0x200 */
+    T_ULONG SIRCDIV;                           /**< Slow IRC Divide Register, offset: 0x204 */
+    T_ULONG SIRCCFG;                           /**< Slow IRC Configuration Register, offset: 0x208 */
+       T_UBYTE RESERVED_3[244];
+   T_ULONG FIRCCSR;                           /**< Fast IRC Control Status Register, offset: 0x300 */
+   T_ULONG FIRCDIV;                           /**< Fast IRC Divide Register, offset: 0x304 */
+   T_ULONG FIRCCFG;                           /**< Fast IRC Configuration Register, offset: 0x308 */
+       T_UBYTE RESERVED_4[756];
+   T_ULONG SPLLCSR;                           /**< System PLL Control Status Register, offset: 0x600 */
+   T_ULONG SPLLDIV;                           /**< System PLL Divide Register, offset: 0x604 */
+   T_ULONG SPLLCFG;                           /**< System PLL Configuration Register, offset: 0x608 */
+} S_SCG;
 
-#define LPIT_BASE_ADDRESS			 0x40037000u
-#define cps_LPIT 					 ((S_LPIT *)LPIT_BASE_ADDRESS)
+#define SCG_BASE_ADDRESS 			0x40064000u
+#define cps_SCG						((S_SCG *)SCG_BASE_ADDRESS)
 
 /* Exported Variables */
 /*============================================================================*/
@@ -74,5 +85,6 @@ typedef struct {
 
 /* Exported functions prototypes */
 /*============================================================================*/
+
 
 #endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */
