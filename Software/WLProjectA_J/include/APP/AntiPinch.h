@@ -4,16 +4,14 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: SCG.c $
- * $Revision: version $
- * $Author: José Antonio V.T. $
- * $Date: 26/10/17 $
+ * $Source: AntiPinch.h $
+ * $Revision: version 1$
+ * $Author: Jorge Acevedo $
+ * $Date: 02/11/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
-/** \file
-    Mapping of the system clock generator.
-
+/** Contains the AntiPinch functionality of the window lifter module.
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -30,54 +28,27 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR             |        VERSION     | DESCRIPTION                     */
+/*  AUTHOR           |       VERSION      |          DESCRIPTION              */
 /*----------------------------------------------------------------------------*/
-/* JOSÉ ANTONIO V.T.   |  1                 | MAPPING OF THE SCG              */
-/*                     |                    |                                 */
+/* Jorge Acevedo     |         1          |AntiPinch function added         */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log:      SCG.h  $
+ * $Log: AntiPinch.h  $
   ============================================================================*/
-#ifndef SCG_H_
-#define SCG_H_
+#ifndef ANTIPINCH_H
+#define ANTIPINCH_H
 
 /* Includes */
 /*============================================================================*/
-#include "MAL\TypDef.h"
+#include "APP/WindowLifter.h"
 
 /* Constants and types */
 /*============================================================================*/
-typedef struct {
-    T_ULONG VERID;                             /**< Version ID Register, offset: 0x0 */
-    T_ULONG PARAM;                             /**< Parameter Register, offset: 0x4 */
-       T_UBYTE RESERVED_0[8];
-    T_ULONG CSR;                               /**< Clock Status Register, offset: 0x10 */
-    T_ULONG RCCR;                              /**< Run Clock Control Register, offset: 0x14 */
-    T_ULONG VCCR;                              /**< VLPR Clock Control Register, offset: 0x18 */
-    T_ULONG HCCR;                              /**< HSRUN Clock Control Register, offset: 0x1C */
-    T_ULONG CLKOUTCNFG;                        /**< SCG CLKOUT Configuration Register, offset: 0x20 */
-       T_UBYTE RESERVED_1[220];
-    T_ULONG SOSCCSR;                           /**< System OSC Control Status Register, offset: 0x100 */
-    T_ULONG SOSCDIV;                           /**< System OSC Divide Register, offset: 0x104 */
-    T_ULONG SOSCCFG;                           /**< System Oscillator Configuration Register, offset: 0x108 */
-    T_UBYTE RESERVED_2[244];
-    T_ULONG SIRCCSR;                           /**< Slow IRC Control Status Register, offset: 0x200 */
-    T_ULONG SIRCDIV;                           /**< Slow IRC Divide Register, offset: 0x204 */
-    T_ULONG SIRCCFG;                           /**< Slow IRC Configuration Register, offset: 0x208 */
-       T_UBYTE RESERVED_3[244];
-   T_ULONG FIRCCSR;                           /**< Fast IRC Control Status Register, offset: 0x300 */
-   T_ULONG FIRCDIV;                           /**< Fast IRC Divide Register, offset: 0x304 */
-   T_ULONG FIRCCFG;                           /**< Fast IRC Configuration Register, offset: 0x308 */
-       T_UBYTE RESERVED_4[756];
-   T_ULONG SPLLCSR;                           /**< System PLL Control Status Register, offset: 0x600 */
-   T_ULONG SPLLDIV;                           /**< System PLL Divide Register, offset: 0x604 */
-   T_ULONG SPLLCFG;                           /**< System PLL Configuration Register, offset: 0x608 */
-} S_SCG;
+#define NO_RESPONSE_TIME 5010
 
-#define SCG_BASE_ADDRESS 			0x40064000u
-#define cps_SCG						((S_SCG *)SCG_BASE_ADDRESS)
+
 
 /* Exported Variables */
 /*============================================================================*/
@@ -85,6 +56,7 @@ typedef struct {
 
 /* Exported functions prototypes */
 /*============================================================================*/
+void AntiPinchfunction(T_UBYTE *lpub_PtrAntiPinchBlock, T_UBYTE *lpub_PtrLEDBarState,T_UWORD *lpuw_PtrTimeCounterAntiPinchChanges);
 
 
 #endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */

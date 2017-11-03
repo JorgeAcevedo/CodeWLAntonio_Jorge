@@ -6,7 +6,7 @@
 /*!
  * $Source: InitLPIT.h $
  * $Revision: 1 $
- * $Author: Jorge Acevedo $
+ * $Author: José Antonio $
  * $Date: 26/10/2017 $
  */
 /*============================================================================*/
@@ -32,7 +32,7 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
 /*----------------------------------------------------------------------------*/
-/*Jorge Acevedo        |         1          | LPIT initialization functions   */
+/*José Antonio V.T     |         1          |                                 */
 /*============================================================================*/
 /*Jorge Acevedo        |         2          | LPIT read interrupt flag        */
 /*============================================================================*/
@@ -63,5 +63,6 @@
 /*============================================================================*/
 void EnableLPIT (T_UBYTE Channel, T_UBYTE Timer);
 T_UBYTE ReadLPITTimmerFlag(void);
+void ResetLPITTimerFlag(void);
 
 #endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */

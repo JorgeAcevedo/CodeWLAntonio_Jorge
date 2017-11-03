@@ -4,15 +4,16 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: GPIO.c $
+ * $Source: SCG.c $
  * $Revision: 1 $
  * $Author: Jorge Acevedo $
- * $Date: 26/10/2017 $
+ * $Date: 26/Oct/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
-/** \file
-    GPIO mapping.
+/** Functions for initializing the System Clock at 8 MHz
+ *								   System Phase Lock Loop 160MHz
+ *								   NormalRunMode  80MHz
 
 */
 /*============================================================================*/
@@ -30,9 +31,9 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR             |        VERSION     | DESCRIPTION                     */
+/*  AUTHOR           |       VERSION      |          DESCRIPTION              */
 /*----------------------------------------------------------------------------*/
-/* Jorge Acevedo       |         1          |Development of the GPIO functions*/
+/* Jorge Acevedo       | 1                  |Init SCC,SPLL,NormalRunMode      */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
@@ -42,7 +43,7 @@
 
 /* Includes */
 /*============================================================================*/
-#include "MAL/GPIO.h"
+#include "MAL\SCG.h"
 
 
 /* Constants and types  */
@@ -71,37 +72,8 @@
 
 
 
-
 /* Exported functions */
 /*============================================================================*/
-void CfgPinOutput (S_GPIO* PTR, T_UBYTE PIN){
-	PTR->PDDR |= (1<<PIN);
-}
 
-void CfgPinInput (S_GPIO* cps_PTR, T_UBYTE lul_PIN){
-	cps_PTR->PDDR &= ~(1<<lul_PIN);
-}
-
-void SetPin      (S_GPIO* PTR, T_UBYTE PIN){
-	PTR->PSOR |= (1<<PIN);
-}
-
-void ClearPin    (S_GPIO* PTR, T_UBYTE PIN){
-	PTR ->PCOR |= (1<<PIN);
-}
-
-void TogglePin (S_GPIO* PTR, T_UBYTE PIN){
-	PTR->PTOR |= (1<<PIN);
-}
-
-T_UBYTE GetPinValue (S_GPIO* PTR, T_UBYTE PIN){
-	PTR->PDIR & (1<<PIN);
-	/*if(PTR->PDIR & (1<<PIN)==1){
-		return 1;
-	}
-	if(PTR->PDIR & (1<<PIN)==0){
-			return 0;
-		}*/
-}
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */

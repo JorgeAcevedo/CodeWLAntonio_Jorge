@@ -4,7 +4,7 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: InitLPIT.c $
+ * $Source: filename.c $
  * $Revision: 1 $
  * $Author: José Antonio $
  * $Date: 26/10/2017 $
@@ -12,8 +12,10 @@
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    Initialization of LPIT channels and time sets.
-
+    short description in one sentence end with dot.
+    detailed
+    multiline
+    description of the file
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -32,9 +34,7 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
-
-/*Jorge Acevedo        |         2          | LPIT read interrupt flag        */
-/*============================================================================*/
+/*José Antonio V.T     |         1          |Function to OneTouch functionality*/
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
@@ -44,7 +44,7 @@
 
 /* Includes */
 /*============================================================================*/
-#include "HAL/InitLPIT.h"
+#include <APP/WindowUp.h>
 
 
 /* Constants and types  */
@@ -76,28 +76,22 @@
 
 /* Exported functions */
 /*============================================================================*/
-void EnableLPIT (T_UBYTE Channel, T_UBYTE Timer){
-	    cps_PCC->PCC[PCC_LPIT] = 0x06000000u;
-	    InitClock (PCC_LPIT);
-		EnableLPITClock();
-		SetLPITMilisec (Channel, Timer);
-		EnableLPITChannel (Channel);
-}
-/*T_UBYTE ReadLPITTimmerFlag(){
+void WindowUP (T_UBYTE* lpub_PtrLEDBarState, T_UWORD* lpuw_PtrTimeCounterLEDBarChange){
+	if((*lpuw_PtrTimeCounterLEDBarChange)==0){
+	    		    		(*lpub_PtrLEDBarState)++;
+	    		    		WindowControl((*lpub_PtrLEDBarState));
+	    		    		(*lpuw_PtrTimeCounterLEDBarChange)++;}
+	if((*lpuw_PtrTimeCounterLEDBarChange) !=0 && (*lpuw_PtrTimeCounterLEDBarChange) <400){
+	    		    		(*lpuw_PtrTimeCounterLEDBarChange)++;
+	    		    			}
+	if((*lpuw_PtrTimeCounterLEDBarChange) ==400){
+	    		    		(*lpuw_PtrTimeCounterLEDBarChange)=0;
+	    		    			}}
 
-	return (cps_LPIT->MSR & 0x00000001u);
-}*/
 
-T_UBYTE ReadLPITTimmerFlag(){
-	T_UBYTE lub_FlagState= (T_UBYTE)0;
 
-	if(0==(cps_LPIT->MSR & 0x00000001u)){
-		lub_FlagState= (T_UBYTE)1;
-	}
-	return lub_FlagState;
-}
 
-void ResetLPITTimerFlag(void){
-cps_LPIT->MSR |= 0x00000001u;}
+
+
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */

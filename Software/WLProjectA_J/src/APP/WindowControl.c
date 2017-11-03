@@ -4,10 +4,8 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: WindowControl.c $
  * $Revision: 1 $
  * $Author: José Antonio $
- * $Date: 27/10/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
@@ -128,7 +126,17 @@ void WindowClosed (void){
 	TogglePORTEPin (PTE16);
 	TogglePORTEPin (PTE15);}
 
-
+T_UBYTE ButtonValidation (T_UBYTE UPDOWNFILTER, T_UWORD* AUTOMANUAL){
+	if((*AUTOMANUAL)<=500){
+		if((*AUTOMANUAL)>0){
+			(*AUTOMANUAL)--;
+			return 0;
+		}
+		if((*AUTOMANUAL)==0){
+			return ButtonPress(UPDOWNFILTER);
+			(*AUTOMANUAL)=500;
+		}
+	}}
 
 
 

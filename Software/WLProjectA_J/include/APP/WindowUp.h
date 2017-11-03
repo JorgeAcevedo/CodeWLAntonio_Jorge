@@ -4,7 +4,7 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: InitLPIT.c $
+ * $Source: filename.h $
  * $Revision: 1 $
  * $Author: José Antonio $
  * $Date: 26/10/2017 $
@@ -12,8 +12,10 @@
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    Initialization of LPIT channels and time sets.
-
+    short description in one sentence end with dot.
+    detailed
+    multiline
+    description of the file
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -30,74 +32,32 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR             |        VERSION     | DESCRIPTION                     */
+/*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
 /*----------------------------------------------------------------------------*/
-
-/*Jorge Acevedo        |         2          | LPIT read interrupt flag        */
-/*============================================================================*/
+/*José Antonio V.T     |         1          |                                 */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: filename.c  $
+ * $Log: filename.h  $
   ============================================================================*/
+#ifndef ONETOUCHUP_H
+#define ONETOUCHUP_H
 
 /* Includes */
 /*============================================================================*/
-#include "HAL/InitLPIT.h"
+#include "APP/WindowControl.h"
 
-
-/* Constants and types  */
+/* Constants and types */
 /*============================================================================*/
 
 
-
-/* Variables */
+/* Exported Variables */
 /*============================================================================*/
 
 
-
-/* Private functions prototypes */
+/* Exported functions prototypes */
 /*============================================================================*/
+void WindowUP (T_UBYTE* lpub_PtrLEDBarState, T_UWORD* lpuw_PtrTimeCounterLEDBarChange);
 
-
-
-/* Inline functions */
-/*============================================================================*/
-
-
-
-
-/* Private functions */
-/*============================================================================*/
-
-
-
-
-/* Exported functions */
-/*============================================================================*/
-void EnableLPIT (T_UBYTE Channel, T_UBYTE Timer){
-	    cps_PCC->PCC[PCC_LPIT] = 0x06000000u;
-	    InitClock (PCC_LPIT);
-		EnableLPITClock();
-		SetLPITMilisec (Channel, Timer);
-		EnableLPITChannel (Channel);
-}
-/*T_UBYTE ReadLPITTimmerFlag(){
-
-	return (cps_LPIT->MSR & 0x00000001u);
-}*/
-
-T_UBYTE ReadLPITTimmerFlag(){
-	T_UBYTE lub_FlagState= (T_UBYTE)0;
-
-	if(0==(cps_LPIT->MSR & 0x00000001u)){
-		lub_FlagState= (T_UBYTE)1;
-	}
-	return lub_FlagState;
-}
-
-void ResetLPITTimerFlag(void){
-cps_LPIT->MSR |= 0x00000001u;}
-
- /* Notice: the file ends with a blank new line to avoid compiler warnings */
+#endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */

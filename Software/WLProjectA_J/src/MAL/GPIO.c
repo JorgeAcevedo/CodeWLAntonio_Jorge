@@ -4,7 +4,7 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: InitLPIT.c $
+ * $Source: GPIO.c $
  * $Revision: 1 $
  * $Author: José Antonio $
  * $Date: 26/10/2017 $
@@ -12,7 +12,7 @@
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    Initialization of LPIT channels and time sets.
+    GPIO mapping.
 
 */
 /*============================================================================*/
@@ -32,9 +32,7 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
-
-/*Jorge Acevedo        |         2          | LPIT read interrupt flag        */
-/*============================================================================*/
+/* JOSÉ ANTONIO V.T.   |         1          |Development of the GPIO functions*/
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
@@ -44,7 +42,7 @@
 
 /* Includes */
 /*============================================================================*/
-#include "HAL/InitLPIT.h"
+#include "MAL/GPIO.h"
 
 
 /* Constants and types  */
@@ -76,28 +74,34 @@
 
 /* Exported functions */
 /*============================================================================*/
-void EnableLPIT (T_UBYTE Channel, T_UBYTE Timer){
-	    cps_PCC->PCC[PCC_LPIT] = 0x06000000u;
-	    InitClock (PCC_LPIT);
-		EnableLPITClock();
-		SetLPITMilisec (Channel, Timer);
-		EnableLPITChannel (Channel);
+void CfgPinOutput (S_GPIO* PTR, T_UBYTE PIN){
+	PTR->PDDR |= (1<<PIN);
 }
-/*T_UBYTE ReadLPITTimmerFlag(){
 
-	return (cps_LPIT->MSR & 0x00000001u);
-}*/
+void CfgPinInput (S_GPIO* cps_PTR, T_UBYTE lul_PIN){
+	cps_PTR->PDDR &= ~(1<<lul_PIN);
+}
 
-T_UBYTE ReadLPITTimmerFlag(){
-	T_UBYTE lub_FlagState= (T_UBYTE)0;
+void SetPin      (S_GPIO* PTR, T_UBYTE PIN){
+	PTR->PSOR |= (1<<PIN);
+}
 
-	if(0==(cps_LPIT->MSR & 0x00000001u)){
-		lub_FlagState= (T_UBYTE)1;
+void ClearPin    (S_GPIO* PTR, T_UBYTE PIN){
+	PTR ->PCOR |= (1<<PIN);
+}
+
+void TogglePin (S_GPIO* PTR, T_UBYTE PIN){
+	PTR->PTOR |= (1<<PIN);
+}
+
+T_UBYTE GetPinValue (S_GPIO* PTR, T_UBYTE PIN){
+	if(PTR->PDIR & 1<<PIN){
+		return 1;
 	}
-	return lub_FlagState;
+	else{
+			return 0;
+		}
 }
 
-void ResetLPITTimerFlag(void){
-cps_LPIT->MSR |= 0x00000001u;}
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */
