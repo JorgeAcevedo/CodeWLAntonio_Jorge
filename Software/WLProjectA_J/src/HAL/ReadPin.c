@@ -75,51 +75,31 @@
 /* Exported functions */
 /*============================================================================*/
 
-T_UBYTE ButtonUPPush (void){
-	GetPinValue (cps_GPIOC,PTC13);
-	if(GetPinValue (cps_GPIOC,PTC13)==1){return 1;}
-	else{return 0;}
-}
-
-T_UBYTE ButtonPush (T_UBYTE UDP){
-	if(UDP == UP){
-		GetPinValue (cps_GPIOC, PTC13);
-		if(GetPinValue (cps_GPIOC, PTC13)==1){
-			return 1;
-		}else{return 0;}
+T_UBYTE ButtonPress (T_UBYTE UPDOWNPINCH){
+	if(UPDOWNPINCH==UP){
+		return GetPinValue(cps_GPIOC,PTC13);
+		}
+	if(UPDOWNPINCH==DOWN){
+		return GetPinValue(cps_GPIOC,PTC12);
 	}
-
-	if(UDP == DOWN){
-		GetPinValue (cps_GPIOC, PTC12);
-
-	}
-	if(UDP == PINCH){
-		GetPinValue (cps_GPIOE, PTE0);
-
+	if(UPDOWNPINCH==PINCH){
+		return GetPinValue(cps_GPIOE,PTE0);
 	}
 }
 
-T_UBYTE ButtonNotPush (T_UBYTE UDP){
-	if(UDP == UP){
-		GetPinValue (cps_GPIOC, PTC13);
-		if(GetPinValue (cps_GPIOC, PTC13)==0){return 1;}
-			else{return 0;}
+
+T_UBYTE ButtonNotPress (T_UBYTE UPDOWNPINCH){
+	if(UPDOWNPINCH == UP){
+		return ~(GetPinValue(cps_GPIOC, PTC13));
 	}
-	if(UDP == DOWN){
-		GetPinValue (cps_GPIOC, PTC12);
-		if(GetPinValue (cps_GPIOC, PTC12)==0){return 1;}
-					else{return 0;}
-	}
-	if(UDP == PINCH){
-		GetPinValue (cps_GPIOE, PTE0);
-		if(GetPinValue (cps_GPIOE, PTE0)==0){return 1;}
-					else{return 0;}
+	if(UPDOWNPINCH == DOWN){
+		return ~(GetPinValue(cps_GPIOC, PTC12));}
+	if(UPDOWNPINCH == PINCH){
+		return ~GetPinValue(cps_GPIOE, PTE0);
 	}
 }
 
-T_UBYTE ButtonUPNotPush(void){
-	GetPinValue (cps_GPIOC,PTC13);
-	}
+
 
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */

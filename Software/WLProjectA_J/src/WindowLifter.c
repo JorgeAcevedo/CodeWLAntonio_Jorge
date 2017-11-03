@@ -4,16 +4,18 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: WindowLifter.c $
+ * $Source: filename.c $
  * $Revision: 1 $
  * $Author: José Antonio $
- * $Date: 29/10/2017 $
+ * $Date: 26/10/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    main function for the window Lifter Application.
-   
+    short description in one sentence end with dot.
+    detailed
+    multiline
+    description of the file
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -32,15 +34,7 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
-/*José Antonio V.T     |         1.1        |Application Window Lifter UP     */
-/*----------------------------------------------------------------------------*/
-/*Jorge Acevedo        |         1.2        |Application Window Lifter DOWN   */
-/*----------------------------------------------------------------------------*/
-/*Merge                |         2          |Application Window Lifter INTEGRATION   */
-/*----------------------------------------------------------------------------*/
-/*Jorge Acevedo        |         2.1        |Minor Problems solved            */
-/*----------------------------------------------------------------------------*/
-/*José Antonio V.T.    |         3          |Final Version                    */
+/*José Antonio V.T     |         1          |                                 */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
@@ -61,14 +55,24 @@
 
 /* Variables */
 /*============================================================================*/
-T_UWORD luw_Counter;
-T_UWORD luw_Process;
-T_UBYTE lub_LED;
-T_UBYTE lub_AntiPinchBloq;
-T_UBYTE lub_FOTU;
-T_UBYTE lub_FOTD;
-T_UBYTE lub_Value;
-T_UWORD luw_CounterAntiPinch;
+T_UWORD luw_TimeCounterValidation;
+T_UWORD luw_TimeCounterLEDBarChange;
+T_UBYTE lub_LEDBarState;
+T_UBYTE lub_AntiPinchBlock;
+T_UBYTE lub_FlagOneTouchUp;
+T_UBYTE lub_FlagOneTouchDown;
+T_UWORD luw_TimeCounterAntiPinchChanges;
+T_UWORD MANUALTime;
+
+T_UWORD *MANUAL = &MANUALTime;
+
+T_UWORD *lpuw_PtrTimeCounterValidation = &luw_TimeCounterValidation;
+T_UWORD *lpuw_PtrTimeCounterLEDBarChange = &luw_TimeCounterLEDBarChange;
+T_UBYTE *lpub_PtrLEDBarState = &lub_LEDBarState;
+T_UBYTE *lpub_PtrAntiPinchBlock = &lub_AntiPinchBlock;
+T_UBYTE *lpub_PtrFlagOneTouchUp = &lub_FlagOneTouchUp;
+T_UBYTE *lpub_PtrFlagOneTouchDown = &lub_FlagOneTouchDown;
+T_UWORD *lpuw_PtrTimeCounterAntiPinchChanges = &luw_TimeCounterAntiPinchChanges;
 
 
 /* Private functions prototypes */
@@ -86,8 +90,9 @@ int main (void);
 /* Private functions */
 /*============================================================================*/
 
+
 int main (void){
-	luw_Counter =0; lub_LED = 10; luw_Process = 0; lub_AntiPinchBloq = 0; lub_FOTU = 0; lub_FOTD = 0; luw_CounterAntiPinch = 0;
+	(*MANUAL) = 500; luw_TimeCounterValidation = 0; (*lpub_PtrLEDBarState) = 0; (*lpuw_PtrTimeCounterLEDBarChange) = 0; lub_AntiPinchBlock = 0; lub_FlagOneTouchUp = 0; lub_FlagOneTouchDown = 0; luw_TimeCounterAntiPinchChanges=0;
 	DisableWDOG();
 	InitClock (PCC_PORTB);
 	InitClock (PCC_PORTC);
@@ -117,74 +122,78 @@ int main (void){
 	TurnOffLED(BlueLED);
 	TurnOffLED(GreenLED);
 
-    WindowClosed ();
+   // WindowClosed ();
 
 
     for(;;){
 
+
+
    while (0==(cps_LPIT->MSR & 0x00000001u)){}
-    	if(cps_GPIOC->PDIR & 1<<PTC13  && lub_LED == 10){luw_Process=0;}
-    	if(cps_GPIOC->PDIR & 1<<PTC13 && lub_LED <=9 && luw_Counter <10){luw_Counter++;}
-    	if(cps_GPIOC->PDIR & 1<<PTC13 && lub_LED <=9 && luw_Counter >=10 && luw_Counter<500 && lub_AntiPinchBloq == 0){
-    		lub_FOTU=1; luw_Counter++; TurnOnLED(BlueLED);
+    	if(ButtonPress(UP)  && lub_LEDBarState == 10){luw_TimeCounterLEDBarChange=0;}
+    	if(ButtonPress(UP) && lub_LEDBarState <=9 && luw_TimeCounterValidation <10){luw_TimeCounterValidation++;}
+    	if(ButtonPress(UP) && lub_LEDBarState <=9 && luw_TimeCounterValidation >=10 && luw_TimeCounterValidation<500 &&  lub_AntiPinchBlock == 0){
+    		lub_FlagOneTouchUp=1; luw_TimeCounterValidation++; TurnOnLED(BlueLED);
     	}
-    	if(cps_GPIOC->PDIR & 1<<PTC13 && lub_LED <=9 && luw_Counter ==500){
-    		lub_FOTU=0; TurnOnLED(BlueLED);
-    		if(lub_AntiPinchBloq == 0){
-    			if(luw_Process==0){
-    		lub_LED++;
-    		WindowControl(lub_LED);
-    			luw_Process++;}
-    			if(luw_Process !=0 && luw_Process <400){
-    			luw_Process++;
+    	if(ButtonPress(UP) && lub_LEDBarState <=9 && luw_TimeCounterValidation == 500){
+    		WindowUP(lpub_PtrLEDBarState, lpuw_PtrTimeCounterLEDBarChange);
+    		lub_FlagOneTouchUp=0;}/*{
+    		lub_FlagOneTouchUp=0; TurnOnLED(BlueLED);
+    		if(lub_AntiPinchBlock == 0){
+    			if(luw_TimeCounterLEDBarChange==0){
+    		lub_LEDBarState++;
+    		WindowControl(lub_LEDBarState);
+    			luw_TimeCounterLEDBarChange++;}
+    			if(luw_TimeCounterLEDBarChange !=0 && luw_TimeCounterLEDBarChange <400){
+    			luw_TimeCounterLEDBarChange++;
     			}
-    			if(luw_Process ==400){
-    				luw_Process=0;
+    			if(luw_TimeCounterLEDBarChange ==400){
+    				luw_TimeCounterLEDBarChange=0;
     			}
     		}
 
-    		if(lub_AntiPinchBloq == 1){
-    			if(lub_LED !=0){
-    				if(luw_CounterAntiPinch==10){
-    				    			    WindowControl(lub_LED);
-    				    			    lub_LED--;
-    				    			    luw_CounterAntiPinch++;}
-    				 if(luw_CounterAntiPinch >10){
-    				    			    luw_CounterAntiPinch++;
+    		if(lub_AntiPinchBlock == 1){
+    			if(lub_LEDBarState !=0){
+    				if(luw_TimeCounterAntiPinchChanges==10){
+    				    			    WindowControl(lub_LEDBarState);
+    				    			    lub_LEDBarState--;
+    				    			    luw_TimeCounterAntiPinchChanges++;}
+    				 if(luw_TimeCounterAntiPinchChanges >10 && luw_TimeCounterAntiPinchChanges <410){
+    				    			    luw_TimeCounterAntiPinchChanges++;
     				    			    			}
-    				 if(luw_CounterAntiPinch ==410){
-    				    			    luw_CounterAntiPinch=10;
+    				 if(luw_TimeCounterAntiPinchChanges ==410){
+    				    			    luw_TimeCounterAntiPinchChanges=10;
     				    			    			}
     			}
     			else{
-    				if(luw_CounterAntiPinch <5010){
-    					luw_CounterAntiPinch++;
+    				if(luw_TimeCounterAntiPinchChanges <5010){
+    					luw_TimeCounterAntiPinchChanges++;
     				}
     				else{
-    					luw_CounterAntiPinch=0;
-    					lub_AntiPinchBloq=0;
+    					luw_TimeCounterAntiPinchChanges=0;
+    					lub_AntiPinchBlock=0;
     				}
     			}
     		}
-    	}
+    	}*/
 
-    	if(cps_GPIOC->PDIR & 1<<PTC12  && lub_LED == 0){luw_Process=0;}
-    	    	if(cps_GPIOC->PDIR & 1<<PTC12 && lub_LED >=1 && luw_Counter <10){luw_Counter++;}
-    	    	if(cps_GPIOC->PDIR & 1<<PTC12 && lub_LED >=1 && luw_Counter >=10 && luw_Counter<500){
-    	    		lub_FOTD=1; luw_Counter++; TurnOnLED(GreenLED);
+    	if(ButtonPress(DOWN)  && lub_LEDBarState == 0){luw_TimeCounterLEDBarChange=0;}
+    	    	if(ButtonPress(DOWN) && lub_LEDBarState >=1 && luw_TimeCounterValidation <10){luw_TimeCounterValidation++;}
+    	    	if(ButtonPress(DOWN) && lub_LEDBarState >=1 && luw_TimeCounterValidation >=10 && luw_TimeCounterValidation<500){
+    	    		lub_FlagOneTouchDown=1; luw_TimeCounterValidation++; TurnOnLED(GreenLED);
     	    	}
-    	    	if(cps_GPIOC->PDIR & 1<<PTC12 && lub_LED >=1 && luw_Counter ==500){
-    	    		lub_FOTD=0; TurnOnLED(GreenLED);
-    	    		if(luw_Process==0){
-    	    			   WindowControl(lub_LED);
-    	    			   lub_LED--;
-    	    			    luw_Process++;
+    	    	if(cps_GPIOC->PDIR & 1<<PTC12 && lub_LEDBarState >=1 && luw_TimeCounterValidation ==500){
+    	    		lub_FlagOneTouchDown=0; TurnOnLED(GreenLED);
+    	    		if(luw_TimeCounterLEDBarChange==0){
+    	    			   WindowControl(lub_LEDBarState);
+    	    			   lub_LEDBarState--;
+    	    			    luw_TimeCounterLEDBarChange++;
     	    			    			}
-    	    		if(luw_Process !=0 && luw_Process <400){
-    	    			    luw_Process++;
+    	    		if(luw_TimeCounterLEDBarChange !=0 && luw_TimeCounterLEDBarChange <400){
+    	    			    luw_TimeCounterLEDBarChange++;
     	    			    			}
-    	    		if(luw_Process == 400){
-    	    			    luw_Process = 0;
+    	    		if(luw_TimeCounterLEDBarChange == 400){
+    	    			    luw_TimeCounterLEDBarChange = 0;
     	    			    			}
     	    		else{}}
 
@@ -193,105 +202,74 @@ int main (void){
     		cps_GPIOD->PSOR |= 1<<0;
     		if (0 == (cps_GPIOC->PDIR & 1<<12)){
     			cps_GPIOD->PSOR |= 1<<16;
-    			luw_Counter = 0;
+    			luw_TimeCounterValidation = 0;
     			}}
+/*
+    	if (ButtonNotPress(UP) && ButtonNotPress(DOWN) && (*lpub_PtrFlagOneTouchUp) == 1 && (*lpub_PtrAntiPinchBlock) == 0 && (*lpub_PtrLEDBarState) < 10)
+    	      {WindowUP(lpub_PtrLEDBarState, lpuw_PtrTimeCounterLEDBarChange);}
 
-    	if((cps_GPIOC->PDIR & 1<<PTC13)==0 && lub_FOTU == 1){
-    		if(lub_AntiPinchBloq == 0 && 0 == (cps_GPIOC->PDIR & 1<<12)){
-    			if(lub_LED !=10){
-    		    			if(luw_Process==0){
-    		    		lub_LED++;
-    		    		WindowControl(lub_LED);
-    		    			luw_Process++;}
-    		    			if(luw_Process !=0 && luw_Process <400){
-    		    			luw_Process++;
-    		    			}
-    		    			if(luw_Process ==400){
-    		    				luw_Process=0;
-    		    			}}
-    			if(lub_LED == 10){
-    				lub_FOTU=0;
-    			}
-    		}
-    		if(lub_AntiPinchBloq == 0 && cps_GPIOC->PDIR & 1<<12){
-    			lub_FOTU = 0;
-    		}
-    		if(lub_AntiPinchBloq == 1){
-    			lub_FOTU =0;
-    		    			if(lub_LED !=0){
-    		    				if(luw_CounterAntiPinch==10){
-    		    				    			    WindowControl(lub_LED);
-    		    				    			    lub_LED--;
-    		    				    			    luw_CounterAntiPinch++;}
-    		    				 if(luw_CounterAntiPinch >10){
-    		    				    			    luw_CounterAntiPinch++;
-    		    				    			    			}
-    		    				 if(luw_CounterAntiPinch ==410){
-    		    				    			    luw_CounterAntiPinch=10;
-    		    				    			    			}
-    		    			}
-    		    			else{
-    		    				if(luw_CounterAntiPinch <5010){
-    		    					luw_CounterAntiPinch++;
-    		    				}
-    		    				else{
-    		    					luw_CounterAntiPinch=0;
-    		    					lub_AntiPinchBloq=0;
-    		    				}
-    		    			}
-    		    		}
+      if (ButtonNotPress(UP) && lub_FlagOneTouchUp == 1 && lub_AntiPinchBlock == 0 && (lub_LEDBarState == 10 || ButtonPress(DOWN))){
+    		lub_FlagOneTouchUp=0;
+    	}*/
+
+    /*	if (ButtonNotPress(UP) && lub_FlagOneTouchUp == 1 && lub_AntiPinchBlock == 1){
+    	 OneTouchDOWN(lpub_PtrLEDBarState, lpuw_PtrTimeCounterLEDBarChange);
     	}
-
-    	if((cps_GPIOC->PDIR & 1<<PTC13)==0 && lub_FOTU == 0 && lub_AntiPinchBloq ==1){
-    	    		if(lub_LED !=0){
-    	    		    	if(luw_CounterAntiPinch==10){
-    	    		    		    WindowControl(lub_LED);
-    	    		    		    lub_LED--;
-    	    		    		    luw_CounterAntiPinch++;}
-    	    		    	if(luw_CounterAntiPinch >10 && luw_CounterAntiPinch <410){
-    	    		    		     luw_CounterAntiPinch++;
-    	    		    		    			    			}
-    	    		    	if(luw_CounterAntiPinch ==410){
-    	    		    		    luw_CounterAntiPinch=10;
-    	    		    		    				    			    			}
-    	    		    		    			}
-    	    		 else{
-    	    		       if(luw_CounterAntiPinch <5010){
-    	    		    		    luw_CounterAntiPinch++;
-    	    		    		    				}
-    	    		       else{
-    	    		    		    luw_CounterAntiPinch=0;
-    	    		    		    lub_AntiPinchBloq=0;
-    	    		    		    				}
-    	    		    		    			}
-    	    	}
-
-
-    	if(cps_GPIOE->PDIR & 1<<PTE0 && luw_CounterAntiPinch <10){luw_CounterAntiPinch++;}
-    	if(cps_GPIOE->PDIR & 1<<PTE0 && luw_CounterAntiPinch ==10  && (cps_GPIOC->PDIR & 1<<PTC13 || lub_FOTU == 1))
-    	{lub_AntiPinchBloq=1;}
+*/
 
 
 
-    	if((cps_GPIOC->PDIR & 1<<PTC12)==0 && lub_FOTD == 1){
+    	/* if((cps_GPIOC->PDIR & 1<<PTC13)==0 && lub_FlagOneTouchUp == 0 && lub_AntiPinchBlock ==1){
+    		if(lub_LEDBarState !=0){
+    		    	if(luw_TimeCounterAntiPinchChanges==10){
+    		    		    WindowControl(lub_LEDBarState);
+    		    		    lub_LEDBarState--;
+    		    		    luw_TimeCounterAntiPinchChanges++;}
+    		    	if(luw_TimeCounterAntiPinchChanges >10 && luw_TimeCounterAntiPinchChanges <410){
+    		    		     luw_TimeCounterAntiPinchChanges++;
+    		    		    			    			}
+    		    	if(luw_TimeCounterAntiPinchChanges ==410){
+    		    		    luw_TimeCounterAntiPinchChanges=10;
+    		    		    				    			    			}
+    		    		    			}
+    		 else{
+    		       if(luw_TimeCounterAntiPinchChanges <5010){
+    		    		    luw_TimeCounterAntiPinchChanges++;
+    		    		    				}
+    		       else{
+    		    		    luw_TimeCounterAntiPinchChanges=0;
+    		    		    lub_AntiPinchBlock=0;
+    		    		    				}
+    		    		    			}
+    	}*/
+
+    	if(cps_GPIOE->PDIR & 1<<PTE0 && luw_TimeCounterAntiPinchChanges <10){luw_TimeCounterAntiPinchChanges++;}
+    	if(cps_GPIOE->PDIR & 1<<PTE0 && luw_TimeCounterAntiPinchChanges ==10 &&
+    			(cps_GPIOC->PDIR & 1<<PTC13 || lub_FlagOneTouchUp == 1) &&
+				((cps_GPIOC->PIDR & 1<<PTC12)==0) && lub_FlagOneTouchDown == 0)
+    	{lub_AntiPinchBlock=1;}
+
+
+
+    	if((cps_GPIOC->PDIR & 1<<PTC12)==0 && lub_FlagOneTouchDown == 1){
     		if(0 == (cps_GPIOC->PDIR & 1<<13)){
-    		   if(lub_LED !=0){
-		    			if(luw_Process==0){
-		    		          WindowControl(lub_LED);
-		    		          lub_LED--;
-		    			      luw_Process++;}
-		    			if(luw_Process !=0 && luw_Process <400){
-		    			luw_Process++;
+    		   if(lub_LEDBarState !=0){
+		    			if(luw_TimeCounterLEDBarChange==0){
+		    		          WindowControl(lub_LEDBarState);
+		    		          lub_LEDBarState--;
+		    			      luw_TimeCounterLEDBarChange++;}
+		    			if(luw_TimeCounterLEDBarChange !=0 && luw_TimeCounterLEDBarChange <400){
+		    			luw_TimeCounterLEDBarChange++;
 		    			}
-		    			if(luw_Process ==400){
-		    				luw_Process=0;
+		    			if(luw_TimeCounterLEDBarChange ==400){
+		    				luw_TimeCounterLEDBarChange=0;
 		    			}}
-			   if(lub_LED == 0){
-				  lub_FOTD=0;
+			   if(lub_LEDBarState == 0){
+				  lub_FlagOneTouchDown=0;
 			}
 		}
     	if(cps_GPIOC->PDIR & 1<<13){
-    		    			lub_FOTD = 0;
+    		    			lub_FlagOneTouchDown = 0;
     		    		}}
     	cps_LPIT->MSR |= 0x00000001u;
     }
