@@ -4,14 +4,17 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: AntiPinch.c $
- * $Revision: version 1$
+ * $Source: SCG.c $
+ * $Revision: 1 $
  * $Author: Jorge Acevedo $
- * $Date: 02/11/2017 $
+ * $Date: 26/Oct/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
-/** Contains the AntiPinch functionality of the window lifter module.
+/** Functions for initializing the System Clock at 8 MHz
+ *								   System Phase Lock Loop 160MHz
+ *								   NormalRunMode  80MHz
+
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -30,17 +33,17 @@
 /*============================================================================*/
 /*  AUTHOR           |       VERSION      |          DESCRIPTION              */
 /*----------------------------------------------------------------------------*/
-/*Jorge Acevedo        |         1          |AntiPinch functionality developed*/
+/* Jorge Acevedo       | 1                  |Init SCC,SPLL,NormalRunMode      */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: AntiPinch.c  $
+ * $Log: filename.c  $
   ============================================================================*/
 
 /* Includes */
 /*============================================================================*/
-#include "APP\AntiPinch.h"
+#include "MAL\SCG.h"
 
 
 /* Constants and types  */
@@ -69,33 +72,8 @@
 
 
 
-
 /* Exported functions */
 /*============================================================================*/
-void AntiPinchfunction(T_UBYTE *lpub_PtrAntiPinchBlock, T_UBYTE *lpub_PtrLEDBarState,T_UWORD *lpuw_PtrTimeCounterAntiPinchChanges){
-    			if((*lpub_PtrLEDBarState) !=WINDOW_COMPLETELY_OPEN){
-    				if((*lpuw_PtrTimeCounterAntiPinchChanges)==VALIDATION_SIGNAL_TIME){
-    				    			    WindowControl((*lpub_PtrLEDBarState));
-    				    			    (*lpub_PtrLEDBarState)--;
-    				    			    (*lpuw_PtrTimeCounterAntiPinchChanges)++;}
-    				 if((*lpuw_PtrTimeCounterAntiPinchChanges) >VALIDATION_SIGNAL_TIME){
-    					 (*lpuw_PtrTimeCounterAntiPinchChanges)++;
-    				    			    			}
-    				 if((*lpuw_PtrTimeCounterAntiPinchChanges) ==CHANGE_WINDOW_STATE_TIME){
-    					 (*lpuw_PtrTimeCounterAntiPinchChanges)=VALIDATION_SIGNAL_TIME;
-    				    			    			}
-    			}
-    			else{
-    				if((*lpuw_PtrTimeCounterAntiPinchChanges) <NO_RESPONSE_TIME){
-    					(*lpuw_PtrTimeCounterAntiPinchChanges)++;
-    				}
-    				else{
-    					(*lpuw_PtrTimeCounterAntiPinchChanges)=START_TIME_COUNTER;
-    					(*lpub_PtrAntiPinchBlock)=DESACTIVATED;
-    				}
-    			}
-    		}
-
 
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */

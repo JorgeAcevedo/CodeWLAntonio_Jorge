@@ -4,14 +4,18 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: AntiPinch.c $
- * $Revision: version 1$
- * $Author: Jorge Acevedo $
- * $Date: 02/11/2017 $
+ * $Source: filename.h $
+ * $Revision: 1 $
+ * $Author: José Antonio $
+ * $Date: 26/10/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
-/** Contains the AntiPinch functionality of the window lifter module.
+/** \file
+    short description in one sentence end with dot.
+    detailed
+    multiline
+    description of the file
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -28,74 +32,32 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR           |       VERSION      |          DESCRIPTION              */
+/*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
 /*----------------------------------------------------------------------------*/
-/*Jorge Acevedo        |         1          |AntiPinch functionality developed*/
+/*José Antonio V.T     |         1          |                                 */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: AntiPinch.c  $
+ * $Log: filename.h  $
   ============================================================================*/
+#ifndef ONETOUCHUP_H
+#define ONETOUCHUP_H
 
 /* Includes */
 /*============================================================================*/
-#include "APP\AntiPinch.h"
+#include "APP/WindowControl.h"
 
-
-/* Constants and types  */
+/* Constants and types */
 /*============================================================================*/
 
 
-
-/* Variables */
+/* Exported Variables */
 /*============================================================================*/
 
 
-
-/* Private functions prototypes */
+/* Exported functions prototypes */
 /*============================================================================*/
+void WindowUP (T_UBYTE* lpub_PtrLEDBarState, T_UWORD* lpuw_PtrTimeCounterLEDBarChange);
 
-
-
-/* Inline functions */
-/*============================================================================*/
-
-
-
-
-/* Private functions */
-/*============================================================================*/
-
-
-
-
-/* Exported functions */
-/*============================================================================*/
-void AntiPinchfunction(T_UBYTE *lpub_PtrAntiPinchBlock, T_UBYTE *lpub_PtrLEDBarState,T_UWORD *lpuw_PtrTimeCounterAntiPinchChanges){
-    			if((*lpub_PtrLEDBarState) !=WINDOW_COMPLETELY_OPEN){
-    				if((*lpuw_PtrTimeCounterAntiPinchChanges)==VALIDATION_SIGNAL_TIME){
-    				    			    WindowControl((*lpub_PtrLEDBarState));
-    				    			    (*lpub_PtrLEDBarState)--;
-    				    			    (*lpuw_PtrTimeCounterAntiPinchChanges)++;}
-    				 if((*lpuw_PtrTimeCounterAntiPinchChanges) >VALIDATION_SIGNAL_TIME){
-    					 (*lpuw_PtrTimeCounterAntiPinchChanges)++;
-    				    			    			}
-    				 if((*lpuw_PtrTimeCounterAntiPinchChanges) ==CHANGE_WINDOW_STATE_TIME){
-    					 (*lpuw_PtrTimeCounterAntiPinchChanges)=VALIDATION_SIGNAL_TIME;
-    				    			    			}
-    			}
-    			else{
-    				if((*lpuw_PtrTimeCounterAntiPinchChanges) <NO_RESPONSE_TIME){
-    					(*lpuw_PtrTimeCounterAntiPinchChanges)++;
-    				}
-    				else{
-    					(*lpuw_PtrTimeCounterAntiPinchChanges)=START_TIME_COUNTER;
-    					(*lpub_PtrAntiPinchBlock)=DESACTIVATED;
-    				}
-    			}
-    		}
-
-
-
- /* Notice: the file ends with a blank new line to avoid compiler warnings */
+#endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */

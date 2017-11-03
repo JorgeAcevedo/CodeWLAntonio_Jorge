@@ -4,14 +4,16 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: AntiPinch.c $
- * $Revision: version 1$
+ * $Source: LPIT.x $
+ * $Revision: 1 $
  * $Author: Jorge Acevedo $
- * $Date: 02/11/2017 $
+ * $Date: 26/10/17 $
  */
 /*============================================================================*/
-/* DESCRIPTION :                                                              */
-/** Contains the AntiPinch functionality of the window lifter module.
+/* DESCRIPTION :
+ *  Map of the Low Power Interrupt Timer                 */
+/**
+
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -30,72 +32,53 @@
 /*============================================================================*/
 /*  AUTHOR           |       VERSION      |          DESCRIPTION              */
 /*----------------------------------------------------------------------------*/
-/*Jorge Acevedo        |         1          |AntiPinch functionality developed*/
+/* Jorge Acevedo       |        1           |Configuration of the LPIT       */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: AntiPinch.c  $
+ * $Log: filename.h  $
   ============================================================================*/
+#ifndef LPIT_H
+#define LPIT_H
 
 /* Includes */
 /*============================================================================*/
-#include "APP\AntiPinch.h"
+#include "MAL\typDef.h"
 
 
-/* Constants and types  */
+/* Constants and types */
+/*============================================================================*/
+typedef struct {
+    T_ULONG VERID;
+    T_ULONG PARAM;
+   T_ULONG MCR;
+   T_ULONG MSR;
+   T_ULONG MIER;
+   T_ULONG SETTEN;
+   T_ULONG CLRTEN;
+       T_UBYTE RESERVED_0[4];
+  struct {
+     T_ULONG TVAL;
+      T_ULONG CVAL;
+     T_ULONG TCTRL;
+         T_UBYTE RESERVED_0[4];
+  } TMR[4];
+} S_LPIT;
+
+#define LPIT_BASE_ADDRESS			 0x40037000u
+#define cps_LPIT 					 ((S_LPIT *)LPIT_BASE_ADDRESS)
+
+/* Exported Variables */
 /*============================================================================*/
 
 
-
-/* Variables */
+/* Exported functions prototypes */
 /*============================================================================*/
+void EnableLPITClock(void);
+void SetLPITMilisec (T_UBYTE Channel, T_UBYTE Timer);
+void EnableLPITChannel (T_UBYTE Channel);
+void DisableLPITChannel (T_UBYTE Channel);
 
 
-
-/* Private functions prototypes */
-/*============================================================================*/
-
-
-
-/* Inline functions */
-/*============================================================================*/
-
-
-
-
-/* Private functions */
-/*============================================================================*/
-
-
-
-
-/* Exported functions */
-/*============================================================================*/
-void AntiPinchfunction(T_UBYTE *lpub_PtrAntiPinchBlock, T_UBYTE *lpub_PtrLEDBarState,T_UWORD *lpuw_PtrTimeCounterAntiPinchChanges){
-    			if((*lpub_PtrLEDBarState) !=WINDOW_COMPLETELY_OPEN){
-    				if((*lpuw_PtrTimeCounterAntiPinchChanges)==VALIDATION_SIGNAL_TIME){
-    				    			    WindowControl((*lpub_PtrLEDBarState));
-    				    			    (*lpub_PtrLEDBarState)--;
-    				    			    (*lpuw_PtrTimeCounterAntiPinchChanges)++;}
-    				 if((*lpuw_PtrTimeCounterAntiPinchChanges) >VALIDATION_SIGNAL_TIME){
-    					 (*lpuw_PtrTimeCounterAntiPinchChanges)++;
-    				    			    			}
-    				 if((*lpuw_PtrTimeCounterAntiPinchChanges) ==CHANGE_WINDOW_STATE_TIME){
-    					 (*lpuw_PtrTimeCounterAntiPinchChanges)=VALIDATION_SIGNAL_TIME;
-    				    			    			}
-    			}
-    			else{
-    				if((*lpuw_PtrTimeCounterAntiPinchChanges) <NO_RESPONSE_TIME){
-    					(*lpuw_PtrTimeCounterAntiPinchChanges)++;
-    				}
-    				else{
-    					(*lpuw_PtrTimeCounterAntiPinchChanges)=START_TIME_COUNTER;
-    					(*lpub_PtrAntiPinchBlock)=DESACTIVATED;
-    				}
-    			}
-    		}
-
-
-
- /* Notice: the file ends with a blank new line to avoid compiler warnings */
+#endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */

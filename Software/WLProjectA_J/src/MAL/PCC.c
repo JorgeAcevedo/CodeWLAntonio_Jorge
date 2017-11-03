@@ -1,17 +1,22 @@
 /*============================================================================*/
 /*                        I BS SOFTWARE GROUP                                 */
 /*============================================================================*/
+/*============================================================================*/
+/*                        I BS SOFTWARE GROUP                                 */
+/*============================================================================*/
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: AntiPinch.c $
- * $Revision: version 1$
+ * $Source: PCC.c $
+ * $Revision: 1 $
  * $Author: Jorge Acevedo $
- * $Date: 02/11/2017 $
+ * $Date: 26/Oct/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
-/** Contains the AntiPinch functionality of the window lifter module.
+/** Functions for initialize the clock for the PORTB, PORTC, PORTD, PORTE &
+ * LPIT
+ *
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -30,17 +35,18 @@
 /*============================================================================*/
 /*  AUTHOR           |       VERSION      |          DESCRIPTION              */
 /*----------------------------------------------------------------------------*/
-/*Jorge Acevedo        |         1          |AntiPinch functionality developed*/
+/* Jorge Acevedo     |          1         |Iniilization clock for de PortB */
+/*                   |                    |PortC PortD PortE & LPIT        */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: AntiPinch.c  $
+ * $Log: PCC.c  $
   ============================================================================*/
 
 /* Includes */
 /*============================================================================*/
-#include "APP\AntiPinch.h"
+#include "MAL\PCC.h"
 
 
 /* Constants and types  */
@@ -70,31 +76,18 @@
 
 
 
+/** Check if action is allowed by overload protection.
+ To avoid overheating of the door locking motors and hardware failure
+ the software shall limit the number of activations in a short period.
+ This function checks if the limitation algorithm allows or not
+ a certain activation of the motors.
+ \returns TRUE if the activation is allowed, FALSE if not
+*/
+
+
+
 /* Exported functions */
 /*============================================================================*/
-void AntiPinchfunction(T_UBYTE *lpub_PtrAntiPinchBlock, T_UBYTE *lpub_PtrLEDBarState,T_UWORD *lpuw_PtrTimeCounterAntiPinchChanges){
-    			if((*lpub_PtrLEDBarState) !=WINDOW_COMPLETELY_OPEN){
-    				if((*lpuw_PtrTimeCounterAntiPinchChanges)==VALIDATION_SIGNAL_TIME){
-    				    			    WindowControl((*lpub_PtrLEDBarState));
-    				    			    (*lpub_PtrLEDBarState)--;
-    				    			    (*lpuw_PtrTimeCounterAntiPinchChanges)++;}
-    				 if((*lpuw_PtrTimeCounterAntiPinchChanges) >VALIDATION_SIGNAL_TIME){
-    					 (*lpuw_PtrTimeCounterAntiPinchChanges)++;
-    				    			    			}
-    				 if((*lpuw_PtrTimeCounterAntiPinchChanges) ==CHANGE_WINDOW_STATE_TIME){
-    					 (*lpuw_PtrTimeCounterAntiPinchChanges)=VALIDATION_SIGNAL_TIME;
-    				    			    			}
-    			}
-    			else{
-    				if((*lpuw_PtrTimeCounterAntiPinchChanges) <NO_RESPONSE_TIME){
-    					(*lpuw_PtrTimeCounterAntiPinchChanges)++;
-    				}
-    				else{
-    					(*lpuw_PtrTimeCounterAntiPinchChanges)=START_TIME_COUNTER;
-    					(*lpub_PtrAntiPinchBlock)=DESACTIVATED;
-    				}
-    			}
-    		}
 
 
 

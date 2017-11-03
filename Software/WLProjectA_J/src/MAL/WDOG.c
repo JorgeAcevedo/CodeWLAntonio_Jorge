@@ -4,14 +4,16 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: AntiPinch.c $
- * $Revision: version 1$
- * $Author: Jorge Acevedo $
- * $Date: 02/11/2017 $
+ * $Source: WDOG.c $
+ * $Revision: 1 $
+ * $Author: José Antonio $
+ * $Date: 26/10/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
-/** Contains the AntiPinch functionality of the window lifter module.
+/** \file
+    WDOG functions.
+
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -28,19 +30,19 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR           |       VERSION      |          DESCRIPTION              */
+/*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
-/*Jorge Acevedo        |         1          |AntiPinch functionality developed*/
+/* JOSÉ ANTONIO V.T.   |         1          |WDOG functions and mapping       */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: AntiPinch.c  $
+ * $Log: filename.c  $
   ============================================================================*/
 
 /* Includes */
 /*============================================================================*/
-#include "APP\AntiPinch.h"
+#include "MAL/WDOG.h"
 
 
 /* Constants and types  */
@@ -72,30 +74,5 @@
 
 /* Exported functions */
 /*============================================================================*/
-void AntiPinchfunction(T_UBYTE *lpub_PtrAntiPinchBlock, T_UBYTE *lpub_PtrLEDBarState,T_UWORD *lpuw_PtrTimeCounterAntiPinchChanges){
-    			if((*lpub_PtrLEDBarState) !=WINDOW_COMPLETELY_OPEN){
-    				if((*lpuw_PtrTimeCounterAntiPinchChanges)==VALIDATION_SIGNAL_TIME){
-    				    			    WindowControl((*lpub_PtrLEDBarState));
-    				    			    (*lpub_PtrLEDBarState)--;
-    				    			    (*lpuw_PtrTimeCounterAntiPinchChanges)++;}
-    				 if((*lpuw_PtrTimeCounterAntiPinchChanges) >VALIDATION_SIGNAL_TIME){
-    					 (*lpuw_PtrTimeCounterAntiPinchChanges)++;
-    				    			    			}
-    				 if((*lpuw_PtrTimeCounterAntiPinchChanges) ==CHANGE_WINDOW_STATE_TIME){
-    					 (*lpuw_PtrTimeCounterAntiPinchChanges)=VALIDATION_SIGNAL_TIME;
-    				    			    			}
-    			}
-    			else{
-    				if((*lpuw_PtrTimeCounterAntiPinchChanges) <NO_RESPONSE_TIME){
-    					(*lpuw_PtrTimeCounterAntiPinchChanges)++;
-    				}
-    				else{
-    					(*lpuw_PtrTimeCounterAntiPinchChanges)=START_TIME_COUNTER;
-    					(*lpub_PtrAntiPinchBlock)=DESACTIVATED;
-    				}
-    			}
-    		}
-
-
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */

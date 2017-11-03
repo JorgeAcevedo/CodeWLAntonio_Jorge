@@ -4,14 +4,16 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: AntiPinch.c $
- * $Revision: version 1$
- * $Author: Jorge Acevedo $
- * $Date: 02/11/2017 $
+ * $Source: GPIO.c $
+ * $Revision: 1 $
+ * $Author: José Antonio $
+ * $Date: 26/10/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
-/** Contains the AntiPinch functionality of the window lifter module.
+/** \file
+    GPIO mapping.
+
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -28,19 +30,19 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR           |       VERSION      |          DESCRIPTION              */
+/*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
-/*Jorge Acevedo        |         1          |AntiPinch functionality developed*/
+/* JOSÉ ANTONIO V.T.   |         1          |Development of the GPIO functions*/
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
- * $Log: AntiPinch.c  $
+ * $Log: filename.c  $
   ============================================================================*/
 
 /* Includes */
 /*============================================================================*/
-#include "APP\AntiPinch.h"
+#include "MAL/GPIO.h"
 
 
 /* Constants and types  */
@@ -72,30 +74,34 @@
 
 /* Exported functions */
 /*============================================================================*/
-void AntiPinchfunction(T_UBYTE *lpub_PtrAntiPinchBlock, T_UBYTE *lpub_PtrLEDBarState,T_UWORD *lpuw_PtrTimeCounterAntiPinchChanges){
-    			if((*lpub_PtrLEDBarState) !=WINDOW_COMPLETELY_OPEN){
-    				if((*lpuw_PtrTimeCounterAntiPinchChanges)==VALIDATION_SIGNAL_TIME){
-    				    			    WindowControl((*lpub_PtrLEDBarState));
-    				    			    (*lpub_PtrLEDBarState)--;
-    				    			    (*lpuw_PtrTimeCounterAntiPinchChanges)++;}
-    				 if((*lpuw_PtrTimeCounterAntiPinchChanges) >VALIDATION_SIGNAL_TIME){
-    					 (*lpuw_PtrTimeCounterAntiPinchChanges)++;
-    				    			    			}
-    				 if((*lpuw_PtrTimeCounterAntiPinchChanges) ==CHANGE_WINDOW_STATE_TIME){
-    					 (*lpuw_PtrTimeCounterAntiPinchChanges)=VALIDATION_SIGNAL_TIME;
-    				    			    			}
-    			}
-    			else{
-    				if((*lpuw_PtrTimeCounterAntiPinchChanges) <NO_RESPONSE_TIME){
-    					(*lpuw_PtrTimeCounterAntiPinchChanges)++;
-    				}
-    				else{
-    					(*lpuw_PtrTimeCounterAntiPinchChanges)=START_TIME_COUNTER;
-    					(*lpub_PtrAntiPinchBlock)=DESACTIVATED;
-    				}
-    			}
-    		}
+void CfgPinOutput (S_GPIO* PTR, T_UBYTE PIN){
+	PTR->PDDR |= (1<<PIN);
+}
 
+void CfgPinInput (S_GPIO* cps_PTR, T_UBYTE lul_PIN){
+	cps_PTR->PDDR &= ~(1<<lul_PIN);
+}
+
+void SetPin      (S_GPIO* PTR, T_UBYTE PIN){
+	PTR->PSOR |= (1<<PIN);
+}
+
+void ClearPin    (S_GPIO* PTR, T_UBYTE PIN){
+	PTR ->PCOR |= (1<<PIN);
+}
+
+void TogglePin (S_GPIO* PTR, T_UBYTE PIN){
+	PTR->PTOR |= (1<<PIN);
+}
+
+T_UBYTE GetPinValue (S_GPIO* PTR, T_UBYTE PIN){
+	if(PTR->PDIR & 1<<PIN){
+		return 1;
+	}
+	else{
+			return 0;
+		}
+}
 
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */

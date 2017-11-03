@@ -40,7 +40,7 @@
 
 /* Includes */
 /*============================================================================*/
-#include "APP\AntiPinch.h"
+#include "APP\ModuleInitialization.h"
 
 
 /* Constants and types  */
@@ -72,29 +72,34 @@
 
 /* Exported functions */
 /*============================================================================*/
-void AntiPinchfunction(T_UBYTE *lpub_PtrAntiPinchBlock, T_UBYTE *lpub_PtrLEDBarState,T_UWORD *lpuw_PtrTimeCounterAntiPinchChanges){
-    			if((*lpub_PtrLEDBarState) !=WINDOW_COMPLETELY_OPEN){
-    				if((*lpuw_PtrTimeCounterAntiPinchChanges)==VALIDATION_SIGNAL_TIME){
-    				    			    WindowControl((*lpub_PtrLEDBarState));
-    				    			    (*lpub_PtrLEDBarState)--;
-    				    			    (*lpuw_PtrTimeCounterAntiPinchChanges)++;}
-    				 if((*lpuw_PtrTimeCounterAntiPinchChanges) >VALIDATION_SIGNAL_TIME){
-    					 (*lpuw_PtrTimeCounterAntiPinchChanges)++;
-    				    			    			}
-    				 if((*lpuw_PtrTimeCounterAntiPinchChanges) ==CHANGE_WINDOW_STATE_TIME){
-    					 (*lpuw_PtrTimeCounterAntiPinchChanges)=VALIDATION_SIGNAL_TIME;
-    				    			    			}
-    			}
-    			else{
-    				if((*lpuw_PtrTimeCounterAntiPinchChanges) <NO_RESPONSE_TIME){
-    					(*lpuw_PtrTimeCounterAntiPinchChanges)++;
-    				}
-    				else{
-    					(*lpuw_PtrTimeCounterAntiPinchChanges)=START_TIME_COUNTER;
-    					(*lpub_PtrAntiPinchBlock)=DESACTIVATED;
-    				}
-    			}
-    		}
+void ModuleInitialization(void){
+
+	    DisableWDOG();
+		InitClock (PCC_PORTB);
+		InitClock (PCC_PORTC);
+		InitClock (PCC_PORTD);
+		InitClock (PCC_PORTE);
+	    InitSOSC();
+		InitSPLL();
+		InitNormalRunMode();
+		EnableLPIT(LPIT0,1);
+		InitPORTCInput  (FILTER, PTC13);
+		InitPORTCInput  (FILTER, PTC12);
+		InitPORTEInput  (PULLER, PTE0);
+
+		InitPORTBOutput  (PTB14);
+		InitPORTBOutput  (PTB15);
+		InitPORTBOutput  (PTB16);
+		InitPORTBOutput  (PTB17);
+		InitPORTCOutput  (PTC3);
+		InitPORTCOutput  (PTC7);
+		InitPORTCOutput  (PTC14);
+		InitPORTEOutput  (PTE9);
+		InitPORTEOutput  (PTE15);
+		InitPORTEOutput  (PTE16);
+		InitPORTDOutput  (PTD0);
+		InitPORTDOutput  (PTD16);
+}
 
 
 
