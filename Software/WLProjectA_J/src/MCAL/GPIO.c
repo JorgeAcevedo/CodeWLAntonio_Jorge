@@ -78,7 +78,7 @@ void CfgPinOutput (S_GPIO* PTR, T_UBYTE PIN){
 	PTR->PDDR |= (1<<PIN);
 }
 
-void GPIO_void_CfgPinInput (S_GPIO* cps_PTR, T_UBYTE lul_PIN){
+void CfgPinInput (S_GPIO* cps_PTR, T_UBYTE lul_PIN){
 	cps_PTR->PDDR &= ~(1<<lul_PIN);
 }
 

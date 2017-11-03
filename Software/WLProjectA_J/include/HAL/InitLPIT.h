@@ -34,6 +34,8 @@
 /*----------------------------------------------------------------------------*/
 /*Jorge Acevedo        |         1          | LPIT initialization functions   */
 /*============================================================================*/
+/*Jorge Acevedo        |         2          | LPIT read interrupt flag        */
+/*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
 /*
@@ -60,5 +62,6 @@
 /* Exported functions prototypes */
 /*============================================================================*/
 void EnableLPIT (T_UBYTE Channel, T_UBYTE Timer);
+T_UBYTE ReadLPITTimmerFlag(void);
 
 #endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */
