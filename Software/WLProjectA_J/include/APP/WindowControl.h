@@ -4,7 +4,7 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: filename.h $
+ * $Source: WindowControl.h $
  * $Revision: 1 $
  * $Author: José Antonio $
  * $Date: 26/10/2017 $
@@ -12,10 +12,8 @@
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    short description in one sentence end with dot.
-    detailed
-    multiline
-    description of the file
+    File to control the behaviour of the peripherials.
+    
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -34,7 +32,6 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
 /*----------------------------------------------------------------------------*/
-/*José Antonio V.T     |         1          |                                 */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
@@ -62,6 +59,10 @@
 #define LED1  (T_UBYTE)1
 #define LED0  (T_UBYTE)0
 
+#define COMPLETE_OPEN_WINDOW 0
+#define ANTIPINCH_BUTTON_VALIDATION_TIME 10
+#define ANTIPINCH_NEXT_ 10
+
 
 
 /* Exported Variables */
@@ -73,7 +74,4 @@
 
 void WindowControl (T_UBYTE LED);
 void WindowClosed (void);
-
-T_UBYTE ButtonValidation (T_UBYTE UPDOWNFILTER, T_UWORD* AUTOMANUAL);
-
 #endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */

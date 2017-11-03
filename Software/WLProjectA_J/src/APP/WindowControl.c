@@ -4,10 +4,8 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: filename.c $
  * $Revision: 1 $
  * $Author: José Antonio $
- * $Date: 26/10/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
@@ -139,4 +137,8 @@ T_UBYTE ButtonValidation (T_UBYTE UPDOWNFILTER, T_UWORD* AUTOMANUAL){
 			(*AUTOMANUAL)=500;
 		}
 	}}
+
+
+
+
  /* Notice: the file ends with a blank new line to avoid compiler warnings */

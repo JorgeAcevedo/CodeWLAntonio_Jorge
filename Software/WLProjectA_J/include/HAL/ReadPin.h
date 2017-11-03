@@ -32,8 +32,7 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
 /*----------------------------------------------------------------------------*/
-/*José Antonio V.T     |         1          |                                 */
-/*----------------------------------------------------------------------------*/
+/*                     |                    | VALUE                           */
 /*José Antonio V.T     |         2          |Functions to be called at APP level*/
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
@@ -62,6 +61,7 @@
 /*============================================================================*/
 T_UBYTE ButtonPress (T_UBYTE UPDOWNPINCH);
 T_UBYTE ButtonNotPress (T_UBYTE UPDOWNPINCH);
+
 
 
 #endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */

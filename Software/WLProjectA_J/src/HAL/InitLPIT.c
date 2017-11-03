@@ -32,7 +32,9 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
-/*José Antonio V.T     |         1          |                                 */
+
+/*Jorge Acevedo        |         2          | LPIT read interrupt flag        */
+/*============================================================================*/
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
@@ -81,6 +83,16 @@ void EnableLPIT (T_UBYTE Channel, T_UBYTE Timer){
 		SetLPITMilisec (Channel, Timer);
 		EnableLPITChannel (Channel);
 }
+
+T_UBYTE ReadLPITTimmerFlag(){
+	T_UBYTE lub_FlagState= (T_UBYTE)0;
+
+	if(0==(cps_LPIT->MSR & 0x00000001u)){
+		lub_FlagState= (T_UBYTE)1;
+	}
+	return lub_FlagState;
+}
+
 
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */
