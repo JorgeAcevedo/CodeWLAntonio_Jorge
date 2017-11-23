@@ -42,17 +42,12 @@
 
 /* Includes */
 /*============================================================================*/
-#include "MAL\TypDef.h"
+#include "APP/WindowLifter.h"
 
 /* Constants and types */
 /*============================================================================*/
-#define ANTIPINCH_ACTIVATED 1
-#define ANTIPINCH_DESACTIVATED 0
-#define WINDOW_COMPLETELY_OPEN 0
-#define VALIDATION_SIGNAL_TIME 10
-#define CHANGE_WINDOW_STATE_TIME 410
 #define NO_RESPONSE_TIME 5010
-#define REESTART_TIME_COUNTER 0
+
 
 
 /* Exported Variables */

@@ -4,16 +4,14 @@
 /*                        OBJECT SPECIFICATION                                */
 /*============================================================================*/
 /*!
- * $Source: WindowLifter.c $
+ * $Source: filename.c $
  * $Revision: 1 $
  * $Author: José Antonio $
- * $Date: 29/10/2017 $
+ * $Date: 26/10/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    main function for the window Lifter Application.
-   
 */
 /*============================================================================*/
 /* COPYRIGHT (C) CONTINENTAL AUTOMOTIVE 2014                                  */
@@ -30,7 +28,7 @@
 /*============================================================================*/
 /*                    REUSE HISTORY - taken over from                         */
 /*============================================================================*/
-/*  AUTHOR             |        VERSION     | DESCRIPTION                     */
+/*/*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
 /*José Antonio V.T     |         1.1        |Application Window Lifter UP     */
 /*----------------------------------------------------------------------------*/
@@ -41,6 +39,14 @@
 /*Jorge Acevedo        |         2.1        |Minor Problems solved            */
 /*----------------------------------------------------------------------------*/
 /*José Antonio V.T.    |         3          |Final Version                    */
+/*----------------------------------------------------------------------------*/
+/*José Antonio V.T     |         4.1        |Revised version                  */
+/*============================================================================*/
+/*Jorge Acevedo        |         4.2        |APP functions created & names    */
+/*                     |                    |in functions and constants change*/
+/*============================================================================*/
+/*José Antonio         |         4.3        |Main function modified with APP  */
+/*                     |                    |functions                        */
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
@@ -54,21 +60,33 @@
 
 
 
+
 /* Constants and types  */
 /*============================================================================*/
 
 
+#define NOTPRESS         (T_UBYTE)0
+
 
 /* Variables */
 /*============================================================================*/
-T_UWORD luw_Counter;
-T_UWORD luw_Process;
-T_UBYTE lub_LED;
-T_UBYTE lub_AntiPinchBloq;
-T_UBYTE lub_FOTU;
-T_UBYTE lub_FOTD;
-T_UBYTE lub_Value;
-T_UWORD luw_CounterAntiPinch;
+T_UWORD luw_TimeCounterValidation;
+T_UWORD luw_TimeCounterLEDBarChange;
+T_UBYTE lub_LEDBarState;
+T_UBYTE lub_AntiPinchBlock;
+T_UBYTE lub_FlagOneTouchUp;
+T_UBYTE lub_FlagOneTouchDown;
+T_UWORD luw_TimeCounterAntiPinchChanges;
+
+
+
+T_UWORD *lpuw_PtrTimeCounterValidation = &luw_TimeCounterValidation;
+T_UWORD *lpuw_PtrTimeCounterLEDBarChange = &luw_TimeCounterLEDBarChange;
+T_UBYTE *lpub_PtrLEDBarState = &lub_LEDBarState;
+T_UBYTE *lpub_PtrAntiPinchBlock = &lub_AntiPinchBlock;
+T_UBYTE *lpub_PtrFlagOneTouchUp = &lub_FlagOneTouchUp;
+T_UBYTE *lpub_PtrFlagOneTouchDown = &lub_FlagOneTouchDown;
+T_UWORD *lpuw_PtrTimeCounterAntiPinchChanges = &luw_TimeCounterAntiPinchChanges;
 
 
 /* Private functions prototypes */
@@ -76,228 +94,98 @@ T_UWORD luw_CounterAntiPinch;
 int main (void);
 
 
-
 /* Inline functions */
 /*============================================================================*/
-
-
 
 
 /* Private functions */
 /*============================================================================*/
 
+
 int main (void){
-	luw_Counter =0; lub_LED = 10; luw_Process = 0; lub_AntiPinchBloq = 0; lub_FOTU = 0; lub_FOTD = 0; luw_CounterAntiPinch = 0;
-	DisableWDOG();
-	InitClock (PCC_PORTB);
-	InitClock (PCC_PORTC);
-	InitClock (PCC_PORTD);
-	InitClock (PCC_PORTE);
-    InitSOSC();
-	InitSPLL();
-	InitNormalRunMode();
-	EnableLPIT(LPIT0,1);
-	InitPORTCInput  (FILTER, PTC13);
-	InitPORTCInput  (FILTER, PTC12);
-	InitPORTEInput  (PULLER, PTE0);
+	luw_TimeCounterValidation =0; lub_LEDBarState = 10; luw_TimeCounterLEDBarChange = 0;
+	lub_AntiPinchBlock = 0; lub_FlagOneTouchUp = 0; lub_FlagOneTouchDown = 0;
+	luw_TimeCounterAntiPinchChanges = 0;
 
-	InitPORTBOutput  (PTB14);
-	InitPORTBOutput  (PTB15);
-	InitPORTBOutput  (PTB16);
-	InitPORTBOutput  (PTB17);
-	InitPORTCOutput  (PTC3);
-	InitPORTCOutput  (PTC7);
-	InitPORTCOutput  (PTC14);
-	InitPORTEOutput  (PTE9);
-	InitPORTEOutput  (PTE15);
-	InitPORTEOutput  (PTE16);
-	InitPORTDOutput  (PTD0);
-	InitPORTDOutput  (PTD16);
 
-	TurnOffLED(BlueLED);
-	TurnOffLED(GreenLED);
 
-    WindowClosed ();
-
+	/*Start Conditions for the Window Lifter*/
+    ModuleInitialization();
+	ModuleStartConditions();
 
     for(;;){
 
-   while (0==(cps_LPIT->MSR & 0x00000001u)){}
-    	if(cps_GPIOC->PDIR & 1<<PTC13  && lub_LED == 10){luw_Process=0;}
-    	if(cps_GPIOC->PDIR & 1<<PTC13 && lub_LED <=9 && luw_Counter <10){luw_Counter++;}
-    	if(cps_GPIOC->PDIR & 1<<PTC13 && lub_LED <=9 && luw_Counter >=10 && luw_Counter<500 && lub_AntiPinchBloq == 0){
-    		lub_FOTU=1; luw_Counter++; TurnOnLED(BlueLED);
+   
+        while (ReadLPITTimmerFlag()){}
+
+/*DOWN functions to close the windows, to verified the button press validation and manual control*/
+        if(ButtonPress(DOWN) && lub_LEDBarState == WINDOW_COMPLETELY_OPEN){luw_TimeCounterLEDBarChange= START_TIME_COUNTER;}
+
+            	if(ButtonPress(DOWN) && lub_LEDBarState > WINDOW_COMPLETELY_OPEN && luw_TimeCounterValidation < VALIDATION_SIGNAL_TIME)
+            	{luw_TimeCounterValidation++;}
+
+        if(ButtonPress(DOWN) && lub_LEDBarState > WINDOW_COMPLETELY_OPEN && luw_TimeCounterValidation >= VALIDATION_SIGNAL_TIME
+            			&& luw_TimeCounterValidation < MANUAL_FUNCTION_TIME){
+            	    		lub_FlagOneTouchDown= ACTIVATED; lub_FlagOneTouchUp= DESACTIVATED; luw_TimeCounterValidation++; TurnOnLED(GreenLED);
+            	    	}
+
+        if(ButtonPress(DOWN) && lub_LEDBarState > WINDOW_COMPLETELY_OPEN && luw_TimeCounterValidation == MANUAL_FUNCTION_TIME){
+            	    		TurnOnLED(GreenLED);
+            		        WindowDOWN(lpub_PtrLEDBarState, lpuw_PtrTimeCounterLEDBarChange);
+            		        lub_FlagOneTouchDown= DESACTIVATED;}
+
+        if (ButtonPress(UP)==NOTPRESS && ButtonPress(DOWN)== NOTPRESS && (*lpub_PtrFlagOneTouchDown) == ACTIVATED && (*lpub_PtrLEDBarState) > WINDOW_COMPLETELY_OPEN)
+            	    	      {WindowDOWN(lpub_PtrLEDBarState, lpuw_PtrTimeCounterLEDBarChange);}
+
+
+/*UP functions to close the windows, to verified the button press validation and manual control*/
+
+    	if(ButtonPress(UP)  && lub_LEDBarState == WINDOW_COMPLETELY_CLOSED){luw_TimeCounterLEDBarChange=START_TIME_COUNTER; lub_FlagOneTouchDown = DESACTIVATED;}
+
+    	if(ButtonPress(UP) && lub_LEDBarState < WINDOW_COMPLETELY_CLOSED && luw_TimeCounterValidation < VALIDATION_SIGNAL_TIME){luw_TimeCounterValidation++;}
+
+    	if(ButtonPress(UP) && lub_LEDBarState < WINDOW_COMPLETELY_CLOSED && luw_TimeCounterValidation >= VALIDATION_SIGNAL_TIME
+    			&& luw_TimeCounterValidation < MANUAL_FUNCTION_TIME &&  lub_AntiPinchBlock == DESACTIVATED){
+    		lub_FlagOneTouchUp=ACTIVATED; lub_FlagOneTouchDown = DESACTIVATED; luw_TimeCounterValidation++; TurnOnLED(BlueLED);
     	}
-    	if(cps_GPIOC->PDIR & 1<<PTC13 && lub_LED <=9 && luw_Counter ==500){
-    		lub_FOTU=0; TurnOnLED(BlueLED);
-    		if(lub_AntiPinchBloq == 0){
-    			if(luw_Process==0){
-    		lub_LED++;
-    		WindowControl(lub_LED);
-    			luw_Process++;}
-    			if(luw_Process !=0 && luw_Process <400){
-    			luw_Process++;
-    			}
-    			if(luw_Process ==400){
-    				luw_Process=0;
-    			}
-    		}
+    	
+    	if(ButtonPress(UP) && lub_LEDBarState < WINDOW_COMPLETELY_CLOSED && luw_TimeCounterValidation == MANUAL_FUNCTION_TIME &&  lub_AntiPinchBlock == DESACTIVATED){
+            TurnOnLED(BlueLED);
+    		WindowUP(lpub_PtrLEDBarState, lpuw_PtrTimeCounterLEDBarChange);
+    		lub_FlagOneTouchUp=DESACTIVATED;}
 
-    		if(lub_AntiPinchBloq == 1){
-    			if(lub_LED !=0){
-    				if(luw_CounterAntiPinch==10){
-    				    			    WindowControl(lub_LED);
-    				    			    lub_LED--;
-    				    			    luw_CounterAntiPinch++;}
-    				 if(luw_CounterAntiPinch >10){
-    				    			    luw_CounterAntiPinch++;
-    				    			    			}
-    				 if(luw_CounterAntiPinch ==410){
-    				    			    luw_CounterAntiPinch=10;
-    				    			    			}
-    			}
-    			else{
-    				if(luw_CounterAntiPinch <5010){
-    					luw_CounterAntiPinch++;
-    				}
-    				else{
-    					luw_CounterAntiPinch=0;
-    					lub_AntiPinchBloq=0;
-    				}
-    			}
-    		}
-    	}
-
-    	if(cps_GPIOC->PDIR & 1<<PTC12  && lub_LED == 0){luw_Process=0;}
-    	    	if(cps_GPIOC->PDIR & 1<<PTC12 && lub_LED >=1 && luw_Counter <10){luw_Counter++;}
-    	    	if(cps_GPIOC->PDIR & 1<<PTC12 && lub_LED >=1 && luw_Counter >=10 && luw_Counter<500){
-    	    		lub_FOTD=1; luw_Counter++; TurnOnLED(GreenLED);
-    	    	}
-    	    	if(cps_GPIOC->PDIR & 1<<PTC12 && lub_LED >=1 && luw_Counter ==500){
-    	    		lub_FOTD=0; TurnOnLED(GreenLED);
-    	    		if(luw_Process==0){
-    	    			   WindowControl(lub_LED);
-    	    			   lub_LED--;
-    	    			    luw_Process++;
-    	    			    			}
-    	    		if(luw_Process !=0 && luw_Process <400){
-    	    			    luw_Process++;
-    	    			    			}
-    	    		if(luw_Process == 400){
-    	    			    luw_Process = 0;
-    	    			    			}
-    	    		else{}}
+    	if (ButtonPress(UP)==NOTPRESS && ButtonPress(DOWN) == NOTPRESS && (*lpub_PtrFlagOneTouchUp) == ACTIVATED
+    	    			&& (*lpub_PtrAntiPinchBlock) == DESACTIVATED && (*lpub_PtrLEDBarState) < WINDOW_COMPLETELY_CLOSED)
+    	    	      {WindowUP(lpub_PtrLEDBarState, lpuw_PtrTimeCounterLEDBarChange);}
 
 
-    	if((cps_GPIOC->PDIR & 1<<PTC13)==0){
-    		cps_GPIOD->PSOR |= 1<<0;
-    		if (0 == (cps_GPIOC->PDIR & 1<<12)){
-    			cps_GPIOD->PSOR |= 1<<16;
-    			luw_Counter = 0;
-    			}}
-
-    	if((cps_GPIOC->PDIR & 1<<PTC13)==0 && lub_FOTU == 1){
-    		if(lub_AntiPinchBloq == 0 && 0 == (cps_GPIOC->PDIR & 1<<12)){
-    			if(lub_LED !=10){
-    		    			if(luw_Process==0){
-    		    		lub_LED++;
-    		    		WindowControl(lub_LED);
-    		    			luw_Process++;}
-    		    			if(luw_Process !=0 && luw_Process <400){
-    		    			luw_Process++;
-    		    			}
-    		    			if(luw_Process ==400){
-    		    				luw_Process=0;
-    		    			}}
-    			if(lub_LED == 10){
-    				lub_FOTU=0;
-    			}
-    		}
-    		if(lub_AntiPinchBloq == 0 && cps_GPIOC->PDIR & 1<<12){
-    			lub_FOTU = 0;
-    		}
-    		if(lub_AntiPinchBloq == 1){
-    			lub_FOTU =0;
-    		    			if(lub_LED !=0){
-    		    				if(luw_CounterAntiPinch==10){
-    		    				    			    WindowControl(lub_LED);
-    		    				    			    lub_LED--;
-    		    				    			    luw_CounterAntiPinch++;}
-    		    				 if(luw_CounterAntiPinch >10){
-    		    				    			    luw_CounterAntiPinch++;
-    		    				    			    			}
-    		    				 if(luw_CounterAntiPinch ==410){
-    		    				    			    luw_CounterAntiPinch=10;
-    		    				    			    			}
-    		    			}
-    		    			else{
-    		    				if(luw_CounterAntiPinch <5010){
-    		    					luw_CounterAntiPinch++;
-    		    				}
-    		    				else{
-    		    					luw_CounterAntiPinch=0;
-    		    					lub_AntiPinchBloq=0;
-    		    				}
-    		    			}
-    		    		}
-    	}
-
-    	if((cps_GPIOC->PDIR & 1<<PTC13)==0 && lub_FOTU == 0 && lub_AntiPinchBloq ==1){
-    	    		if(lub_LED !=0){
-    	    		    	if(luw_CounterAntiPinch==10){
-    	    		    		    WindowControl(lub_LED);
-    	    		    		    lub_LED--;
-    	    		    		    luw_CounterAntiPinch++;}
-    	    		    	if(luw_CounterAntiPinch >10 && luw_CounterAntiPinch <410){
-    	    		    		     luw_CounterAntiPinch++;
-    	    		    		    			    			}
-    	    		    	if(luw_CounterAntiPinch ==410){
-    	    		    		    luw_CounterAntiPinch=10;
-    	    		    		    				    			    			}
-    	    		    		    			}
-    	    		 else{
-    	    		       if(luw_CounterAntiPinch <5010){
-    	    		    		    luw_CounterAntiPinch++;
-    	    		    		    				}
-    	    		       else{
-    	    		    		    luw_CounterAntiPinch=0;
-    	    		    		    lub_AntiPinchBloq=0;
-    	    		    		    				}
-    	    		    		    			}
-    	    	}
+/*AntiPinch function*/
+        if(lub_AntiPinchBlock == ACTIVATED){
+        	lub_FlagOneTouchUp = DESACTIVATED;
+        	AntiPinchfunction(lpub_PtrAntiPinchBlock, lpub_PtrLEDBarState, lpuw_PtrTimeCounterAntiPinchChanges);}
 
 
-    	if(cps_GPIOE->PDIR & 1<<PTE0 && luw_CounterAntiPinch <10){luw_CounterAntiPinch++;}
-    	if(cps_GPIOE->PDIR & 1<<PTE0 && luw_CounterAntiPinch ==10  && (cps_GPIOC->PDIR & 1<<PTC13 || lub_FOTU == 1))
-    	{lub_AntiPinchBloq=1;}
+/*AntiPinch button press validation*/
+    	if(ButtonPress(PINCH) && luw_TimeCounterAntiPinchChanges < VALIDATION_SIGNAL_TIME && (ButtonPress(UP)||lub_FlagOneTouchUp == ACTIVATED))
+    	{luw_TimeCounterAntiPinchChanges++;}
+    	if(ButtonPress(PINCH) && luw_TimeCounterAntiPinchChanges == VALIDATION_SIGNAL_TIME && (ButtonPress(UP)||lub_FlagOneTouchUp == ACTIVATED))
+    	{*lpub_PtrAntiPinchBlock = 1;}
+    	    	
+
+/*Counter reset if there is no button pressed*/
+    	if(ButtonPress(UP)==NOTPRESS){
+    		     TurnOffLED(BlueLED);
+    	    if (ButtonPress(DOWN)==NOTPRESS){
+    		     TurnOffLED(GreenLED);
+    		     luw_TimeCounterValidation = START_TIME_COUNTER;
+    		}}
 
 
-
-    	if((cps_GPIOC->PDIR & 1<<PTC12)==0 && lub_FOTD == 1){
-    		if(0 == (cps_GPIOC->PDIR & 1<<13)){
-    		   if(lub_LED !=0){
-		    			if(luw_Process==0){
-		    		          WindowControl(lub_LED);
-		    		          lub_LED--;
-		    			      luw_Process++;}
-		    			if(luw_Process !=0 && luw_Process <400){
-		    			luw_Process++;
-		    			}
-		    			if(luw_Process ==400){
-		    				luw_Process=0;
-		    			}}
-			   if(lub_LED == 0){
-				  lub_FOTD=0;
-			}
-		}
-    	if(cps_GPIOC->PDIR & 1<<13){
-    		    			lub_FOTD = 0;
-    		    		}}
-    	cps_LPIT->MSR |= 0x00000001u;
-    }
-
-return 0;
+        ResetLPITTimerFlag();}
+    return 0;
 }
+    	
+
 
 
 

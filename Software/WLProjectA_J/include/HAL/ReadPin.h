@@ -32,8 +32,8 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     |  DESCRIPTION                    */
 /*----------------------------------------------------------------------------*/
-/*José Antonio V.T     |         1          | FUNCTIONS TO GET THE PERIPHERIAL*/
-                       |                    | VALUE                           */
+/*                     |                    | VALUE                           */
+/*José Antonio V.T     |         2          |Functions to be called at APP level*/
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
@@ -59,11 +59,9 @@
 
 /* Exported functions prototypes */
 /*============================================================================*/
-T_UBYTE ButtonPush (T_UBYTE UDP);
-T_UBYTE ButtonNotPush (T_UBYTE UDP);
+T_UBYTE ButtonPress (T_UBYTE UPDOWNPINCH);
+T_UBYTE ButtonNotPress (T_UBYTE UPDOWNPINCH);
 
-T_UBYTE ButtonUPNotPush(void);
-T_UBYTE ButtonUPPush(void);
 
 
 #endif  /* Notice: the file ends with a blank new line to avoid compiler warnings */

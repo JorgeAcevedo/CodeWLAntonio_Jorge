@@ -73,7 +73,6 @@
 /* Exported functions */
 /*============================================================================*/
 void AntiPinchfunction(T_UBYTE *lpub_PtrAntiPinchBlock, T_UBYTE *lpub_PtrLEDBarState,T_UWORD *lpuw_PtrTimeCounterAntiPinchChanges){
-if((*lpub_PtrAntiPinchBlock) == ANTIPINCH_ACTIVATED){
     			if((*lpub_PtrLEDBarState) !=WINDOW_COMPLETELY_OPEN){
     				if((*lpuw_PtrTimeCounterAntiPinchChanges)==VALIDATION_SIGNAL_TIME){
     				    			    WindowControl((*lpub_PtrLEDBarState));
@@ -91,12 +90,12 @@ if((*lpub_PtrAntiPinchBlock) == ANTIPINCH_ACTIVATED){
     					(*lpuw_PtrTimeCounterAntiPinchChanges)++;
     				}
     				else{
-    					(*lpuw_PtrTimeCounterAntiPinchChanges)=REESTART_TIME_COUNTER;
-    					(*lpub_PtrAntiPinchBlock)=ANTIPINCH_DESACTIVATED;
+    					(*lpuw_PtrTimeCounterAntiPinchChanges)=START_TIME_COUNTER;
+    					(*lpub_PtrAntiPinchBlock)=DESACTIVATED;
     				}
     			}
     		}
-}
+
 
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */

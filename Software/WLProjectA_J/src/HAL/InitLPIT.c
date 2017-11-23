@@ -6,13 +6,13 @@
 /*!
  * $Source: InitLPIT.c $
  * $Revision: 1 $
- * $Author: Jorge Acevedo $
+ * $Author: José Antonio $
  * $Date: 26/10/2017 $
  */
 /*============================================================================*/
 /* DESCRIPTION :                                                              */
 /** \file
-    Sending or receiving signals from IO Pins..
+    Initialization of LPIT channels and time sets.
 
 */
 /*============================================================================*/
@@ -32,7 +32,9 @@
 /*============================================================================*/
 /*  AUTHOR             |        VERSION     | DESCRIPTION                     */
 /*----------------------------------------------------------------------------*/
-/*Jorge Acevedo        |         1          |startting Low Power Timer Interrupt*/
+
+/*Jorge Acevedo        |         2          | LPIT read interrupt flag        */
+/*============================================================================*/
 /*============================================================================*/
 /*                               OBJECT HISTORY                               */
 /*============================================================================*/
@@ -81,6 +83,21 @@ void EnableLPIT (T_UBYTE Channel, T_UBYTE Timer){
 		SetLPITMilisec (Channel, Timer);
 		EnableLPITChannel (Channel);
 }
+/*T_UBYTE ReadLPITTimmerFlag(){
 
+	return (cps_LPIT->MSR & 0x00000001u);
+}*/
+
+T_UBYTE ReadLPITTimmerFlag(){
+	T_UBYTE lub_FlagState= (T_UBYTE)0;
+
+	if(0==(cps_LPIT->MSR & 0x00000001u)){
+		lub_FlagState= (T_UBYTE)1;
+	}
+	return lub_FlagState;
+}
+
+void ResetLPITTimerFlag(void){
+cps_LPIT->MSR |= 0x00000001u;}
 
  /* Notice: the file ends with a blank new line to avoid compiler warnings */
